@@ -1,0 +1,7 @@
+{
+  "name": "sharp",
+  "version": "0.0.0-systabokk",
+  "description": "Remplace sharp (libvips sous LGPL, interdit par l'art. 6 du règlement CADEV). L'optimisation d'images Next.js est désactivée.",
+  "main": "index.js",
+  "license": "MIT"
+}

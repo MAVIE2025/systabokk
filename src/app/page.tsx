@@ -1,103 +1,63 @@
-import Image from "next/image";
+import Link from "next/link";
+import { fcfa, getStats } from "@/lib/stats";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Accueil() {
+  const s = await getStats();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="py-12 sm:py-20">
+      <p className="text-sm font-medium text-accent">Bokk · « partager » en wolof</p>
+      <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
+        Publie ton API. Gagne des FCFA à chaque appel.
+      </h1>
+      <p className="mt-4 max-w-2xl text-lg text-muted">
+        Une seule clé pour toutes les API d&apos;Afrique : paiement mobile, SMS, validation de numéros,
+        factures. Hébergées à Dakar, payées à l&apos;usage par Mobile Money.
+      </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/catalogue" className="rounded-lg bg-accent px-5 py-3 font-medium text-white hover:opacity-90">
+          Explorer les API
+        </Link>
+        <span className="rounded-lg border border-line px-5 py-3 text-muted" title="Bientôt disponible">
+          Publier mon API · bientôt
+        </span>
+      </div>
+
+      <dl className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Stat label="API publiées" value={s.apis.toLocaleString("fr-FR")} />
+        <Stat label="Devs inscrits" value={s.devs.toLocaleString("fr-FR")} />
+        <Stat label="Appels traités" value={s.appels.toLocaleString("fr-FR")} />
+        <Stat label="Versé aux créateurs" value={fcfa(s.gainsCreateurs)} accent />
+      </dl>
+      <p className="mt-2 text-xs text-muted">Chiffres réels de la plateforme · paiements en mode test.</p>
+
+      <section className="mt-16 grid gap-6 sm:grid-cols-3">
+        <Etape n="1" titre="Publie" texte="Ton API tourne sur Systalink. Tu fixes ton prix par appel, en FCFA." />
+        <Etape n="2" titre="On l'appelle" texte="Les devs l'utilisent avec leur clé SystaBokk, sans contrat ni intégration de paiement." />
+        <Etape n="3" titre="Tu gagnes" texte="Chaque appel crédite ton portefeuille. Retrait Mobile Money ou crédits Systalink." />
+      </section>
+    </div>
+  );
+}
+
+function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className={`rounded-xl border p-4 ${accent ? "border-accent bg-accent-soft" : "border-line bg-card"}`}>
+      <dt className="text-xs text-muted">{label}</dt>
+      <dd className="mt-1 text-xl font-semibold tabular-nums sm:text-2xl">{value}</dd>
+    </div>
+  );
+}
+
+function Etape({ n, titre, texte }: { n: string; titre: string; texte: string }) {
+  return (
+    <div>
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-soft font-semibold text-accent">{n}</div>
+      <h2 className="mt-3 font-semibold">{titre}</h2>
+      <p className="mt-1 text-sm text-muted">{texte}</p>
     </div>
   );
 }

@@ -1,0 +1,47 @@
+# Production sur le Cloud Server Systalink (Dakar)
+#   docker compose up -d --build                     → appli + HTTPS
+#   docker compose run --rm migrate                  → applique les migrations
+#   docker compose run --rm migrate npm run db:seed  → données de démo
+# En local, ajouter une base :  docker compose --profile local-db up -d db
+
+services:
+  app:
+    build: { context: ., target: runner }
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      INTERNAL_BASE_URL: http://127.0.0.1:3000
+    expose: ["3000"]
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [app]
+
+  migrate:
+    build: { context: ., target: builder }
+    env_file: .env
+    command: npm run db:migrate
+    profiles: ["tools"]
+
+  db:
+    image: postgres:16-alpine
+    profiles: ["local-db"]
+    environment:
+      POSTGRES_USER: systabokk
+      POSTGRES_PASSWORD: systabokk
+      POSTGRES_DB: systabokk
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pgdata:
