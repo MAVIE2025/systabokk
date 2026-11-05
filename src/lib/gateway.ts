@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { pool } from "@/db";
 import { hashApiKey, readApiKey } from "@/lib/keys";
 import { hotePublic } from "@/lib/url-sure";
+import { baseInterne } from "@/lib/env";
 
 /** Une API telle que la passerelle en a besoin. */
 type ApiRow = {
@@ -166,7 +167,7 @@ async function balanceOf(devId: string): Promise<number> {
 /** « internal:/demo-apis/… » désigne une API de démo servie par l'appli elle-même. */
 function resolveUpstream(upstreamUrl: string, subPath: string[], search: string) {
   const base = upstreamUrl.startsWith("internal:")
-    ? (process.env.INTERNAL_BASE_URL ?? "http://localhost:3000") + upstreamUrl.slice("internal:".length)
+    ? baseInterne() + upstreamUrl.slice("internal:".length)
     : upstreamUrl;
   const path = subPath.map(encodeURIComponent).join("/");
   return base.replace(/\/+$/, "") + (path ? "/" + path : "") + search;
@@ -209,7 +210,9 @@ async function forward(
       return { ok: false, status: response.status, latencyMs };
     }
     return { ok: true, response, status: response.status, latencyMs };
-  } catch {
+  } catch (e) {
+    const cause = e instanceof Error ? ((e.cause as { code?: string })?.code ?? e.name) : String(e);
+    console.warn(`[passerelle] ${requestId} échec réseau vers ${new URL(target).host} : ${cause}`);
     return { ok: false, status: 502, latencyMs: Date.now() - started };
   }
 }

@@ -24,6 +24,8 @@ ENV APP_VERSION=$APP_VERSION
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
+# Migrations SQL, appliquées automatiquement au démarrage (src/instrumentation.ts)
+COPY --from=builder --chown=node:node /app/drizzle ./drizzle
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \

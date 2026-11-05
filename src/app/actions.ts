@@ -9,6 +9,7 @@ import { CATEGORIES, PAYS_PUBLICATION } from "@/lib/categories";
 import { devConnecte, devParCle, effacerCle, poserCle } from "@/lib/session";
 import { verifierFormeUrl, verifierUrlPublique } from "@/lib/url-sure";
 import { pannes } from "@/lib/demo/pannes";
+import { baseInterne } from "@/lib/env";
 
 const CREDIT_BIENVENUE = 1000; // FCFA fictifs offerts à l'inscription (mode test)
 const RECHARGE_TEST = 2000;
@@ -189,7 +190,7 @@ export async function essayerApi(slug: string): Promise<ResultatEssai> {
   if (!a) return { erreur: "API introuvable." };
 
   const chemin = (a.prise_slug ? `/v1/prises/${a.prise_slug}` : `/v1/apis/${slug}`) + a.example_path;
-  const base = process.env.INTERNAL_BASE_URL ?? "http://127.0.0.1:3000";
+  const base = baseInterne();
   const r = await fetch(base + chemin, {
     method: a.example_method,
     headers: { authorization: `Bearer ${dev.cle}`, ...(a.example_body ? { "content-type": "application/json" } : {}) },

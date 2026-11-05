@@ -1,74 +1,96 @@
 # Mettre SystaBokk en ligne sur Systalink — pas à pas
 
-Durée : environ 45 minutes. Un seul produit Datacloud suffit : un **Cloud Server à Dakar**.
-L'application, la base PostgreSQL et le HTTPS tournent tous sur ce serveur.
+Configuration retenue : **Base de données PostgreSQL à Dakar** (remise CADEV de 40 %, condition de
+l'article 6) + **Web service (API)** déployé depuis GitHub. Systalink construit l'appli à partir du
+`Dockerfile`, l'héberge et fournit le HTTPS. Aucun serveur à administrer.
 
-## 1. Acheter le serveur (règlement CADEV, art. 6 et 8)
+Au premier démarrage, l'appli **crée seule ses tables** et charge les **données de démo** et le **Pass Jury**.
 
-Sur https://platform.systalink.com, depuis votre espace client :
+## 1. Base de données (Dakar, -40 %)
 
-- Produit : **Cloud Server (VPS) — localisation Dakar** (les VPS hors Dakar n'ont pas la remise).
-- Taille : **2 vCPU et 4 Go de RAM** conseillés (2 Go minimum, voir l'étape 4 dans ce cas).
-- Système : **Ubuntu 24.04** (ou Debian 12).
-- **Appliquez le code promo de l'équipe (40 %)** avant de payer.
-- **Gardez la facture** : elle prouve l'achat lors de la soumission.
+Sur https://platform.systalink.com → Créer un nouveau service → **Nouvelle base de données** :
 
-Notez l'**adresse IP** du serveur et le mot de passe root (ou ajoutez votre clé SSH).
+- Nom : `systabokk-db` · Région : **Dakar (Sénégal)** · Moteur : **PostgreSQL**
+- Formule : la plus petite suffit pour le concours.
+- **Code promo CADEV (40 %)** avant de payer. **Gardez la facture** (preuve pour l'art. 6).
 
-## 2. Pointer le domaine
+Une fois créée, notez les informations de connexion : hôte, port, utilisateur, mot de passe, nom de la base,
+et si le **SSL** est exigé.
 
-Dans la zone DNS de votre domaine (chez Systalink si vous l'y avez), créez :
+## 2. Mettre le code sur GitHub (dépôt privé)
 
-| Type | Nom | Valeur |
-| --- | --- | --- |
-| A | `systabokk` | l'IP du serveur |
-
-Le site sera alors `https://systabokk.votredomaine.com`. Comptez quelques minutes de propagation.
-
-## 3. Envoyer le code sur le serveur (depuis Windows, PowerShell)
+1. Sur https://github.com/new : nom `systabokk`, **Private**, sans README. Créer.
+2. Sur Windows, décompressez `systabokk.zip` (clic droit → Extraire tout), puis dans PowerShell :
 
 ```powershell
-cd "C:\Users\Gael_\Desktop\hackaton systalink"
-scp systabokk.zip root@IP_DU_SERVEUR:/root/
-ssh root@IP_DU_SERVEUR
+cd "C:\Users\Gael_\Desktop\hackaton systalink\systabokk\systabokk"
+git remote add origin https://github.com/VOTRE_COMPTE/systabokk.git
+git branch -M main
+git push -u origin main
 ```
 
-## 4. Préparer le serveur (dans la session SSH)
+(Le dossier contient déjà l'historique git. Si `git` n'est pas installé : https://git-scm.com/download/win.)
 
-```bash
-apt update && apt install -y unzip
-curl -fsSL https://get.docker.com | sh          # installe Docker
+## 3. Web service (API)
 
-# Seulement si le serveur a 2 Go de RAM : ajouter 2 Go de mémoire d'échange pour la compilation
-fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
-echo '/swapfile none swap sw 0 0' >> /etc/fstab
+Créer un nouveau service → **Nouveau service web** → **Fournisseur Git** → **Continuer avec GitHub** →
+autorisez l'accès au dépôt `systabokk`, puis :
 
-unzip systabokk.zip && cd systabokk
-```
-
-## 5. Configurer et lancer
-
-```bash
-./scripts/preparer-env.sh systabokk.votredomaine.com   # crée .env avec des secrets aléatoires
-./deploy.sh                                             # construit, migre la base, démarre, vérifie
-docker compose run --rm migrate npm run db:seed         # données de démo + compte Pass Jury (une fois)
-```
-
-Ouvrez `https://systabokk.votredomaine.com` : le certificat HTTPS est obtenu automatiquement.
-
-## 6. Vérifier
-
-- `https://…/api/ready` doit répondre `{"statut":"pret"}`.
-- Page **Pass Jury** → « Entrer » → ouvrir une API → « Essayer ».
-- Couper le fournisseur A sur la page Pass Jury, puis essayer la prise Paiement : la réponse indique « Servi par : paiement-b ».
-
-## Commandes utiles
-
-| Besoin | Commande |
+| Réglage | Valeur |
 | --- | --- |
-| Voir les journaux | `docker compose logs -f app` |
-| Redémarrer | `docker compose restart app` |
-| Mettre à jour après un nouveau zip | `unzip -o ../systabokk.zip -d .. && ./deploy.sh` |
-| Sauvegarder la base | `docker compose exec db pg_dump -U systabokk systabokk > sauvegarde.sql` |
+| Branche | `main` |
+| Méthode de construction | **Dockerfile** (à la racine du dépôt) |
+| Port de l'application | `3000` |
+| Région | Dakar si proposée |
 
-> `deploy.sh` utilise `git pull` si le dossier est un dépôt git ; sinon il continue sans.
+**Variables d'environnement** à ajouter :
+
+| Nom | Valeur |
+| --- | --- |
+| `DATABASE_URL` | `postgres://UTILISATEUR:MOT_DE_PASSE@HOTE:PORT/BASE` (infos de l'étape 1) |
+| `DATABASE_SSL` | `require` si la base exige le SSL, sinon ne pas mettre la variable |
+| `PASS_JURY_KEY` | une clé longue qui commence par `sbk_live_` (voir ci-dessous) |
+| `DEMO_ADMIN_TOKEN` | un mot secret quelconque |
+| `CREATOR_SHARE_PERCENT` | `90` |
+
+Pour fabriquer une clé dans PowerShell :
+`"sbk_live_" + -join ((48..57)+(65..90)+(97..122) | Get-Random -Count 32 | % {[char]$_})`
+
+Lancez le déploiement. Dans les journaux, vous devez voir :
+`[démarrage] migrations appliquées` puis `[démarrage] données de démo prêtes`.
+
+## 4. Nom de domaine (facultatif, -40 %)
+
+Si le Web service permet un domaine personnalisé, ajoutez par exemple `systabokk.votredomaine.com`
+et créez l'enregistrement DNS demandé (souvent un CNAME). Sinon, l'adresse fournie par Systalink suffit.
+
+## 5. Vérifier
+
+- `https://…/api/ready` répond `{"statut":"pret"}`.
+- Page **Pass Jury** → « Entrer avec le Pass Jury » → ouvrir une API → « Essayer ».
+- Pass Jury → « Couper » le fournisseur A du paiement → « Essayer la prise Paiement » :
+  la réponse indique « Servi par : paiement-b ».
+
+## En cas de problème
+
+| Symptôme | Cause probable |
+| --- | --- |
+| `/api/ready` répond `base_indisponible` | `DATABASE_URL` erronée, ou SSL : essayez `DATABASE_SSL=require` |
+| Journaux : `self-signed certificate` | Mettre `DATABASE_SSL=require` |
+| Page Pass Jury : « n'est pas configuré » | `PASS_JURY_KEY` absente des variables |
+| Le build échoue | Vérifier que le build utilise le **Dockerfile** de la racine |
+
+---
+
+## Annexe — Alternative : un serveur virtuel avec Docker
+
+Si vous utilisez un serveur (VPS) à la place du Web service, `docker-compose.yml` fait tourner l'appli,
+PostgreSQL (non exposé à Internet) et le HTTPS (Caddy) sur la même machine :
+
+```bash
+curl -fsSL https://get.docker.com | sh
+./scripts/preparer-env.sh systabokk.votredomaine.com
+./deploy.sh
+```
+
+Attention : le règlement exclut de la remise les VPS situés hors de Dakar.

@@ -55,10 +55,9 @@ et, pour une prise, `x-systabokk-fournisseur` et `x-systabokk-bascule`.
 
 | Couche | Choix | Produit Systalink |
 | --- | --- | --- |
-| Application et passerelle | Next.js 15 (une seule appli, routes `/v1/…`) | Cloud Server, Dakar |
-| Données | PostgreSQL 16 + Drizzle ORM, sur le même serveur | Cloud Server, Dakar |
-| HTTPS | Caddy (certificat automatique) | — |
-| Déploiement | Docker Compose, `deploy.sh` | Cloud Server |
+| Application et passerelle | Next.js 15 (une seule appli, routes `/v1/…`), image Docker | Web service (API) |
+| Données | PostgreSQL + Drizzle ORM, migrations au démarrage | Base de données, Dakar |
+| HTTPS et déploiement | Depuis GitHub, à chaque push | Web service (API) |
 
 **Facturation sûre.** Le prix est réservé de façon atomique (`update … where solde >= prix`) :
 un solde ne peut jamais devenir négatif, même avec des appels simultanés. L'appel est ensuite
@@ -113,16 +112,13 @@ npm run dev                       # http://localhost:3000
 
 Vérifications : `npm test`, `npm run typecheck`, `npm run lint`, `npm run check:licenses`.
 
-## Déployer sur le Cloud Server Systalink
+## Déployer sur Systalink
 
-Voir **[DEPLOIEMENT.md](DEPLOIEMENT.md)** : un seul Cloud Server à Dakar fait tourner l'appli,
-PostgreSQL (non exposé à Internet) et le HTTPS. En résumé :
-
-```bash
-./scripts/preparer-env.sh systabokk.votredomaine.com
-./deploy.sh
-docker compose run --rm migrate npm run db:seed
-```
+Voir **[DEPLOIEMENT.md](DEPLOIEMENT.md)**. Configuration retenue : **Base de données PostgreSQL à Dakar**
+(remise CADEV, condition de l'art. 6) + **Web service (API)** construit depuis GitHub avec le `Dockerfile`.
+Au premier démarrage, l'appli applique ses migrations et charge les données de démo toute seule
+(`src/instrumentation.ts`). Une variante tout-en-un sur serveur virtuel (Docker Compose + Caddy) est décrite
+en annexe.
 
 ## Démo : la bascule en direct
 
@@ -138,8 +134,8 @@ curl -X POST -H "x-demo-token: $DEMO_ADMIN_TOKEN" https://DOMAINE/demo-apis/paie
 
 ## Conformité au règlement CADEV
 
-- **Produit Datacloud** (art. 6) : déploiement sur un Cloud Server Systalink à Dakar et
-  PostgreSQL géré, acquis avec la remise de l'article 8.
+- **Produit Datacloud** (art. 6) : la Base de données PostgreSQL à Dakar, acquise avec la remise de
+  l'article 8, est utilisée par le déploiement ; l'appli tourne sur un Web service Systalink.
 - **Licences** (art. 6) : uniquement des licences permissives. `npm run check:licenses` échoue
   si une dépendance de production est sous GPL, LGPL ou AGPL, et génère `LICENCES-DEPENDANCES.md`.
   `sharp` (dont les binaires libvips sont sous LGPL) est remplacé par un module vide
