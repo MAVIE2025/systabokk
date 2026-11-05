@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { fcfa, getStats } from "@/lib/stats";
+import { CATEGORIES } from "@/lib/categories";
 
 export const dynamic = "force-dynamic";
 
@@ -13,17 +14,20 @@ export default async function Accueil() {
         Publie ton API. Gagne des FCFA à chaque appel.
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-muted">
-        Une seule clé pour toutes les API d&apos;Afrique : paiement mobile, SMS, validation de numéros,
-        factures. Hébergées à Dakar, payées à l&apos;usage par Mobile Money.
+        Une seule clé pour toutes les API d&apos;Afrique : paiement, SMS, traduction, cartes, données,
+        documents… Hébergées à Dakar, payées à l&apos;usage par Mobile Money.
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/catalogue" className="rounded-lg bg-accent px-5 py-3 font-medium text-white hover:opacity-90">
           Explorer les API
         </Link>
-        <span className="rounded-lg border border-line px-5 py-3 text-muted" title="Bientôt disponible">
-          Publier mon API · bientôt
-        </span>
+        <Link href="/publier" className="rounded-lg border border-line bg-card px-5 py-3 font-medium hover:border-accent">
+          Publier mon API
+        </Link>
+        <Link href="/jury" className="px-2 py-3 text-sm text-muted underline hover:text-accent">
+          Essayer avec le Pass Jury
+        </Link>
       </div>
 
       <dl className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -33,6 +37,18 @@ export default async function Accueil() {
         <Stat label="Versé aux créateurs" value={fcfa(s.gainsCreateurs)} accent />
       </dl>
       <p className="mt-2 text-xs text-muted">Chiffres réels de la plateforme · paiements en mode test.</p>
+
+      <section className="mt-16">
+        <h2 className="text-lg font-semibold">Tout type d&apos;API</h2>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {CATEGORIES.filter((c) => c.slug !== "autre").map((c) => (
+            <Link key={c.slug} href={`/catalogue?categorie=${c.slug}`} className="rounded-xl border border-line bg-card p-3 hover:border-accent">
+              <p className="text-sm font-medium">{c.nom}</p>
+              <p className="mt-0.5 text-xs text-muted">{c.exemple}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <section className="mt-16 grid gap-6 sm:grid-cols-3">
         <Etape n="1" titre="Publie" texte="Ton API tourne sur Systalink. Tu fixes ton prix par appel, en FCFA." />

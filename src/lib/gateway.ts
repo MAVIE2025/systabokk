@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { pool } from "@/db";
 import { hashApiKey, readApiKey } from "@/lib/keys";
+import { hotePublic } from "@/lib/url-sure";
 
 /** Une API telle que la passerelle en a besoin. */
 type ApiRow = {
@@ -176,7 +177,17 @@ type UpstreamResult =
   | { ok: false; status: number; latencyMs: number };
 
 /** Relaie la requête au fournisseur. Une erreur réseau ou un 5xx compte comme un échec. */
-async function forward(req: Request, body: ArrayBuffer | null, target: string, requestId: string): Promise<UpstreamResult> {
+async function forward(
+  req: Request,
+  body: ArrayBuffer | null,
+  target: string,
+  requestId: string,
+  externe: boolean,
+): Promise<UpstreamResult> {
+  // Protection SSRF : une API externe ne doit jamais viser une adresse interne
+  if (externe && !(await hotePublic(new URL(target).hostname))) {
+    return { ok: false, status: 502, latencyMs: 0 };
+  }
   const headers = new Headers();
   req.headers.forEach((value, name) => {
     if (!DROP_REQUEST_HEADERS.has(name.toLowerCase())) headers.set(name, value);
@@ -241,7 +252,7 @@ export async function handleApiCall(req: Request, slug: string, subPath: string[
   const requestId = randomUUID();
   const body = await readBody(req);
   const target = resolveUpstream(api.upstream_url, subPath, new URL(req.url).search);
-  const result = await forward(req, body, target, requestId);
+  const result = await forward(req, body, target, requestId, !api.upstream_url.startsWith("internal:"));
 
   await settle({
     api,
@@ -293,7 +304,9 @@ export async function handlePriseCall(req: Request, priseSlug: string, subPath: 
   for (const api of providers) {
     if (!(await reserve(consumer, api.price_fcfa))) return NO_FUNDS(api.price_fcfa);
 
-    const result = await forward(req, body, resolveUpstream(api.upstream_url, subPath, search), requestId);
+    const result = await forward(
+      req, body, resolveUpstream(api.upstream_url, subPath, search), requestId, !api.upstream_url.startsWith("internal:"),
+    );
     await settle({
       api,
       consumerDevId: consumer,

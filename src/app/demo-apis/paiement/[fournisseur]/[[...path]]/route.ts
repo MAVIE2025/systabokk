@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { validerTelephone } from "@/lib/demo/telephone";
+import { basculerPanne, pannes } from "@/lib/demo/pannes";
 
 export const dynamic = "force-dynamic";
 
@@ -8,9 +9,6 @@ export const dynamic = "force-dynamic";
 const FOURNISSEURS = { a: "Fournisseur A (test)", b: "Fournisseur B (test)" } as const;
 type Code = keyof typeof FOURNISSEURS;
 
-// État de panne simulée, gardé en mémoire (une seule instance en démo)
-const etat = globalThis as unknown as { pannes?: Set<string> };
-const pannes = (etat.pannes ??= new Set<string>());
 
 type Ctx = { params: Promise<{ fournisseur: string; path?: string[] }> };
 
@@ -21,7 +19,7 @@ function estCode(x: string): x is Code {
 export async function GET(_req: Request, ctx: Ctx) {
   const { fournisseur } = await ctx.params;
   if (!estCode(fournisseur)) return Response.json({ erreur: "inconnu" }, { status: 404 });
-  return Response.json({ fournisseur: FOURNISSEURS[fournisseur], en_panne: pannes.has(fournisseur) });
+  return Response.json({ fournisseur: FOURNISSEURS[fournisseur], en_panne: pannes.has(`paiement-${fournisseur}`) });
 }
 
 export async function POST(req: Request, ctx: Ctx) {
@@ -30,15 +28,12 @@ export async function POST(req: Request, ctx: Ctx) {
 
   // POST …/panne  (jeton de démo requis) : bascule l'état de panne
   if (path[0] === "panne") {
-    if (!process.env.DEMO_ADMIN_TOKEN || req.headers.get("x-demo-token") !== process.env.DEMO_ADMIN_TOKEN) {
-      return Response.json({ erreur: "interdit" }, { status: 403 });
-    }
-    if (pannes.has(fournisseur)) pannes.delete(fournisseur);
-    else pannes.add(fournisseur);
-    return Response.json({ fournisseur: FOURNISSEURS[fournisseur], en_panne: pannes.has(fournisseur) });
+    const enPanne = basculerPanne(req, `paiement-${fournisseur}`);
+    if (enPanne === null) return Response.json({ erreur: "interdit" }, { status: 403 });
+    return Response.json({ fournisseur: FOURNISSEURS[fournisseur], en_panne: enPanne });
   }
 
-  if (pannes.has(fournisseur)) {
+  if (pannes.has(`paiement-${fournisseur}`)) {
     return Response.json({ erreur: "service_indisponible" }, { status: 503 });
   }
 

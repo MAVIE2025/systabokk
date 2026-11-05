@@ -18,7 +18,8 @@ eux, peinent à trouver un premier client.
 
 Sur SystaBokk, on n'échange pas que du savoir : on échange **des services qui tournent**.
 
-1. **Publier.** Un dev publie son API hébergée sur Systalink et fixe son prix par appel, en FCFA.
+1. **Publier.** Un dev publie son API — **de n'importe quel type** : paiement, SMS, traduction, cartes,
+   données, documents… — hébergée sur Systalink, et fixe son prix par appel, en FCFA.
 2. **Utiliser.** Les autres l'appellent avec **une seule clé**, valable pour tout le catalogue.
 3. **Gagner.** Chaque appel crédite le créateur (90 %) ; la plateforme garde une commission (10 %).
 4. **Prises standard.** Une interface commune par besoin (ex. `paiement-mobile`) servie par
@@ -55,7 +56,7 @@ et, pour une prise, `x-systabokk-fournisseur` et `x-systabokk-bascule`.
 | Couche | Choix | Produit Systalink |
 | --- | --- | --- |
 | Application et passerelle | Next.js 15 (une seule appli, routes `/v1/…`) | Cloud Server, Dakar |
-| Données | PostgreSQL + Drizzle ORM | PostgreSQL géré |
+| Données | PostgreSQL 16 + Drizzle ORM, sur le même serveur | Cloud Server, Dakar |
 | HTTPS | Caddy (certificat automatique) | — |
 | Déploiement | Docker Compose, `deploy.sh` | Cloud Server |
 
@@ -64,7 +65,24 @@ un solde ne peut jamais devenir négatif, même avec des appels simultanés. L'a
 clôturé dans une seule transaction : revenu du créateur + commission en cas de succès,
 remboursement en cas d'échec du fournisseur. Chaque mouvement est inscrit au grand livre (`ledger`).
 
-**Clés.** Seul le hash SHA-256 de la clé est stocké ; la clé n'est montrée qu'une fois.
+**Clés.** Seul le hash SHA-256 de la clé est stocké ; la clé n'est montrée qu'une fois. Sur le site,
+elle est gardée dans un cookie httpOnly, jamais lisible par le JavaScript.
+
+**Protection SSRF.** Une API publiée ne peut pas viser une adresse interne : https obligatoire, pas
+d'identifiants dans l'URL, et le nom de domaine doit résoudre uniquement vers des IP publiques
+(vérifié à la publication **et** à chaque appel ; les redirections ne sont pas suivies).
+
+## Parcours sur le site
+
+| Page | Ce qu'on y fait |
+| --- | --- |
+| `/` | Le message, les chiffres réels, les catégories d'API |
+| `/catalogue` | Toutes les API, filtrables par catégorie et par recherche |
+| `/catalogue/{api}` | Fiche : prix, fiabilité mesurée, exemple `curl`, bouton « Essayer » (appel réel payé) |
+| `/inscription` | Compte en 30 s : la clé est affichée une fois, 1 000 FCFA de test offerts |
+| `/espace` | Solde, gains, mes API, recharge de test |
+| `/publier` | Publier une API de tout type, prix libre, prise standard facultative |
+| `/jury` | Pass Jury : compte crédité, pannes simulées pour voir la bascule |
 
 ```
 src/
@@ -97,13 +115,19 @@ Vérifications : `npm test`, `npm run typecheck`, `npm run lint`, `npm run check
 
 ## Déployer sur le Cloud Server Systalink
 
-1. Pointer le domaine (enregistrement A) vers l'IP du serveur.
-2. Sur le serveur : installer Docker, cloner le dépôt, créer `.env` à partir de `.env.example`
-   (`DATABASE_URL` du PostgreSQL géré, `DOMAIN`, un `DEMO_ADMIN_TOKEN` long et secret).
-3. `./deploy.sh` — construit, migre, démarre, attend `/api/ready`.
-4. Une fois : `docker compose run --rm migrate npm run db:seed` pour les données de démo.
+Voir **[DEPLOIEMENT.md](DEPLOIEMENT.md)** : un seul Cloud Server à Dakar fait tourner l'appli,
+PostgreSQL (non exposé à Internet) et le HTTPS. En résumé :
+
+```bash
+./scripts/preparer-env.sh systabokk.votredomaine.com
+./deploy.sh
+docker compose run --rm migrate npm run db:seed
+```
 
 ## Démo : la bascule en direct
+
+Le plus simple : page **Pass Jury**, bouton « Couper » du fournisseur A, puis « Essayer » sur la prise.
+En ligne de commande :
 
 ```bash
 # Couper le fournisseur A (jeton de démo requis)

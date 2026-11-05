@@ -59,10 +59,15 @@ export const apis = pgTable(
     priceFcfa: integer("price_fcfa").notNull(),
     priseSlug: text("prise_slug").references(() => prises.slug),
     prisePriority: integer("prise_priority").notNull().default(100),
+    docUrl: text("doc_url"), // documentation du créateur (facultative)
+    // Exemple d'appel utilisé par le bouton « Essayer » de la fiche
+    exampleMethod: text("example_method").notNull().default("GET"),
+    examplePath: text("example_path").notNull().default(""), // ex. « ?montant=12500 » ou « /envois »
+    exampleBody: text("example_body"), // JSON pour POST/PUT
     isActive: boolean("is_active").notNull().default(true),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [index("apis_prise_idx").on(t.priseSlug)],
+  (t) => [index("apis_prise_idx").on(t.priseSlug), index("apis_owner_idx").on(t.ownerDevId)],
 );
 
 /** Journal des appels passés par la passerelle. */

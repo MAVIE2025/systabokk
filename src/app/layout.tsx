@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { devConnecte } from "@/lib/session";
+import { fcfa } from "@/lib/stats";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -7,17 +9,27 @@ export const metadata: Metadata = {
   description: "Publie ton API, gagne des FCFA à chaque appel. Une clé, toutes les API d'Afrique, hébergées à Dakar.",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const dev = await devConnecte();
   return (
     <html lang="fr">
       <body className="min-h-screen antialiased">
         <header className="border-b border-line">
-          <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+          <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-4 py-3">
             <Link href="/" className="text-lg font-semibold tracking-tight">
               Systa<span className="text-accent">Bokk</span>
             </Link>
-            <div className="flex gap-5 text-sm">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
               <Link href="/catalogue" className="hover:text-accent">Catalogue</Link>
+              <Link href="/publier" className="hover:text-accent">Publier</Link>
+              <Link href="/jury" className="hover:text-accent">Pass Jury</Link>
+              {dev ? (
+                <Link href="/espace" className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent">
+                  {dev.name.split(" ")[0]} · {fcfa(dev.balance)}
+                </Link>
+              ) : (
+                <Link href="/espace" className="hover:text-accent">Mon espace</Link>
+              )}
             </div>
           </nav>
         </header>

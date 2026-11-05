@@ -1,8 +1,6 @@
-# Production sur le Cloud Server Systalink (Dakar)
-#   docker compose up -d --build                     → appli + HTTPS
-#   docker compose run --rm migrate                  → applique les migrations
-#   docker compose run --rm migrate npm run db:seed  → données de démo
-# En local, ajouter une base :  docker compose --profile local-db up -d db
+# Production sur le Cloud Server Systalink (Dakar) : appli + PostgreSQL + HTTPS, sur un seul serveur.
+#   ./deploy.sh                                       → construit, migre, démarre
+#   docker compose run --rm migrate npm run db:seed   → données de démo + Pass Jury (une fois)
 
 services:
   app:
@@ -12,6 +10,23 @@ services:
     environment:
       INTERNAL_BASE_URL: http://127.0.0.1:3000
     expose: ["3000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: systabokk
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Définissez POSTGRES_PASSWORD dans .env}
+      POSTGRES_DB: systabokk
+    # Accessible seulement depuis le serveur lui-même (jamais depuis Internet)
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U systabokk -d systabokk"]
+      interval: 5s
+      retries: 10
 
   caddy:
     image: caddy:2.10-alpine
@@ -30,18 +45,10 @@ services:
     env_file: .env
     command: npm run db:migrate
     profiles: ["tools"]
-
-  db:
-    image: postgres:16-alpine
-    profiles: ["local-db"]
-    environment:
-      POSTGRES_USER: systabokk
-      POSTGRES_PASSWORD: systabokk
-      POSTGRES_DB: systabokk
-    ports: ["5432:5432"]
-    volumes: [pgdata:/var/lib/postgresql/data]
+    depends_on:
+      db: { condition: service_healthy }
 
 volumes:
+  pgdata:
   caddy_data:
   caddy_config:
-  pgdata:

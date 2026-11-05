@@ -1,10 +1,13 @@
 #!/bin/sh
 # À lancer SUR le Cloud Server Systalink, dans le dossier du projet.
-# Met à jour le code, reconstruit, applique les migrations et attend que l'appli soit prête.
+# Met à jour le code (si dépôt git distant), reconstruit, applique les migrations et attend que l'appli soit prête.
 set -eu
 
-git pull --ff-only
-export APP_VERSION="$(git rev-parse --short HEAD)"
+if git remote get-url origin >/dev/null 2>&1; then
+  git pull --ff-only
+fi
+APP_VERSION="$(git rev-parse --short HEAD 2>/dev/null || date +%Y%m%d-%H%M)"
+export APP_VERSION
 
 docker compose build --build-arg APP_VERSION="$APP_VERSION"
 docker compose run --rm migrate
