@@ -1,24 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbfaf7;
-  --foreground: #1c1917;
-  --muted: #6b645c;
-  --line: #e7e2da;
+  --background: #f5f8fe;   /* fond bleuté, comme Systalink */
+  --foreground: #0f172a;
+  --muted: #5b6475;
+  --line: #dfe5f0;
   --card: #ffffff;
-  --accent: #b4530a;       /* ocre */
-  --accent-soft: #fdf1e6;
+  --accent: #2563eb;       /* bleu Systalink */
+  --accent-soft: #eef3fe;
+  --ocre: #b4530a;         /* touche africaine : « Bokk » */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #141210;
-    --foreground: #f3efe9;
-    --muted: #a39b91;
-    --line: #2e2a26;
-    --card: #1c1916;
-    --accent: #f08a3c;
-    --accent-soft: #2a1d12;
+    --background: #0b1120;
+    --foreground: #e8edf7;
+    --muted: #94a0b8;
+    --line: #1f2a40;
+    --card: #111a2e;
+    --accent: #6b9bff;
+    --accent-soft: #15213b;
+    --ocre: #f08a3c;
   }
 }
 
@@ -30,6 +32,7 @@
   --color-card: var(--card);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-ocre: var(--ocre);
 }
 
 body {

@@ -105,7 +105,7 @@ export default async function FicheApi({ params }: { params: Promise<{ slug: str
 
       <section className="mt-8">
         <h2 className="font-semibold">Appeler cette API</h2>
-        <pre className="mt-2 overflow-x-auto rounded-xl bg-[#1c1917] p-4 text-xs text-[#f3efe9]">{curl}</pre>
+        <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0f172a] p-4 text-xs text-[#e8edf7]">{curl}</pre>
       </section>
 
       <section className="mt-8">

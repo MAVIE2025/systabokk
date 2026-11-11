@@ -9,7 +9,7 @@ import { bouton } from "@/components/ui";
 export const dynamic = "force-dynamic";
 
 const Code = ({ children }: { children: string }) => (
-  <pre className="mt-2 overflow-x-auto rounded-xl bg-[#1c1917] p-4 text-xs text-[#f3efe9]">{children}</pre>
+  <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0f172a] p-4 text-xs text-[#e8edf7]">{children}</pre>
 );
 
 export default async function Agents() {

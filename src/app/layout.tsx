@@ -17,7 +17,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <header className="border-b border-line">
           <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-4 py-3">
             <Link href="/" className="text-lg font-semibold tracking-tight">
-              Systa<span className="text-accent">Bokk</span>
+              <span className="text-accent">Systa</span><span className="text-ocre">Bokk</span>
             </Link>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
               <Link href="/catalogue" className="hover:text-accent">Catalogue</Link>

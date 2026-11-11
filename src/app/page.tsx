@@ -9,7 +9,7 @@ export default async function Accueil() {
 
   return (
     <div className="py-12 sm:py-20">
-      <p className="text-sm font-medium text-accent">Bokk · « partager » en wolof</p>
+      <p className="text-sm font-medium text-ocre">Bokk · « partager » en wolof</p>
       <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
         Publie ton API. Gagne des FCFA à chaque appel.
       </h1>
