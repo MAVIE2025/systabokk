@@ -13,6 +13,7 @@ function expliquer(e: unknown): string {
   const code = err?.code ?? "";
   const pistes: Record<string, string> = {
     "28P01": "mot de passe ou utilisateur refusé : vérifiez DATABASE_URL",
+    "08P01": "la base exige le SSL : ajoutez DATABASE_SSL=require",
     "28000": "utilisateur refusé : vérifiez le nom d'utilisateur dans DATABASE_URL",
     ERR_INVALID_URL: "DATABASE_URL mal formée : le port est-il un nombre ? un caractère spécial du mot de passe (@ : / #) doit être encodé",
     "3D000": "base de données inconnue : vérifiez le nom après le dernier « / »",

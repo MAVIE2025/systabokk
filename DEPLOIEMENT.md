@@ -13,6 +13,7 @@ Rien n'est publié : l'appli tourne sur votre ordinateur, branchée sur la base 
 ```powershell
 npm install
 $env:DATABASE_URL="postgres://systabokk_db_u:VRAI_MOT_DE_PASSE@HOTE:VRAI_PORT/systabokk_db"
+$env:DATABASE_SSL="require"
 $env:PASS_JURY_KEY="sbk_live_test-local-1234567890abcdef"
 npm run build
 npm start
@@ -69,7 +70,7 @@ autorisez l'accès au dépôt `systabokk`, puis :
 | Nom | Valeur |
 | --- | --- |
 | `DATABASE_URL` | `postgres://UTILISATEUR:MOT_DE_PASSE@HOTE:PORT/BASE` (infos de l'étape 1) |
-| `DATABASE_SSL` | `require` si la base exige le SSL, sinon ne pas mettre la variable |
+| `DATABASE_SSL` | `require` (**obligatoire** : la base Systalink exige le SSL, même si sa fiche affiche « disable ») |
 | `PASS_JURY_KEY` | une clé longue qui commence par `sbk_live_` (voir ci-dessous) |
 | `DEMO_ADMIN_TOKEN` | un mot secret quelconque |
 | `CREATOR_SHARE_PERCENT` | `90` |
@@ -96,7 +97,8 @@ et créez l'enregistrement DNS demandé (souvent un CNAME). Sinon, l'adresse fou
 
 | Symptôme | Cause probable |
 | --- | --- |
-| `/api/ready` répond `base_indisponible` | `DATABASE_URL` erronée, ou SSL : essayez `DATABASE_SSL=require` |
+| `/api/ready` répond `base_indisponible` | `DATABASE_URL` erronée, ou `DATABASE_SSL=require` oublié |
+| Journaux : `SSL required (08P01)` | Ajouter `DATABASE_SSL=require` |
 | Journaux : `self-signed certificate` | Mettre `DATABASE_SSL=require` |
 | Page Pass Jury : « n'est pas configuré » | `PASS_JURY_KEY` absente des variables |
 | Le build échoue | Vérifier que le build utilise le **Dockerfile** de la racine |
