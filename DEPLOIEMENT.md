@@ -6,6 +6,27 @@ l'article 6) + **Web service (API)** déployé depuis GitHub. Systalink construi
 
 Au premier démarrage, l'appli **crée seule ses tables** et charge les **données de démo** et le **Pass Jury**.
 
+## 0. Tester sur son PC avant de déployer (recommandé)
+
+Rien n'est publié : l'appli tourne sur votre ordinateur, branchée sur la base de Dakar.
+
+```powershell
+npm install
+$env:DATABASE_URL="postgres://systabokk_db_u:VRAI_MOT_DE_PASSE@HOTE:VRAI_PORT/systabokk_db"
+$env:PASS_JURY_KEY="sbk_live_test-local-1234567890abcdef"
+npm run build
+npm start
+```
+
+- **Remplacez réellement** `VRAI_MOT_DE_PASSE` (bouton « Afficher » de la base) et `VRAI_PORT` (le **port public**,
+  un nombre, visible quand la base accepte les connexions). Laisser ces mots tels quels provoque l'erreur
+  `Invalid URL` au démarrage.
+- Si le mot de passe contient `@ : / # ? %`, encodez-le dans PowerShell :
+  `[uri]::EscapeDataString("le-mot-de-passe")`, et collez le résultat dans l'adresse.
+- Succès : la console affiche `[démarrage] migrations appliquées` puis `données de démo prêtes`, et
+  http://localhost:3000 indique « 8 API publiées ».
+- En cas d'échec, la console donne la cause et une piste (mot de passe refusé, port, hôte introuvable…).
+
 ## 1. Base de données (Dakar, -40 %)
 
 Sur https://platform.systalink.com → Créer un nouveau service → **Nouvelle base de données** :

@@ -15,13 +15,13 @@
     "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.5",
-    "next": "15.5.4",
+    "drizzle-orm": "^0.45.4",
+    "next": "^15.5.29",
     "pg": "^8.16.3",
     "qrcode": "^1.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "zod": "^3.25.76"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -31,16 +31,17 @@
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "drizzle-kit": "^0.31.4",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "^15.5.29",
     "license-checker-rseidelsohn": "^4.4.2",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",
     "typescript": "^5"
   },
   "overrides": {
-    "sharp": "file:./vendor/no-sharp"
+    "sharp": "file:./vendor/no-sharp",
+    "postcss": "8.5.32"
   },
   "engines": {
     "node": ">=20"

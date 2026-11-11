@@ -4,9 +4,9 @@ Généré par `npm run check:licenses`. Aucune licence GPL, LGPL ou AGPL (règle
 
 | Paquet | Licence |
 | --- | --- |
-| @next/env@15.5.4 | MIT |
-| @next/swc-linux-x64-gnu@15.5.4 | MIT |
-| @next/swc-linux-x64-musl@15.5.4 | MIT |
+| @next/env@15.5.29 | MIT |
+| @next/swc-linux-x64-gnu@15.5.29 | MIT |
+| @next/swc-linux-x64-musl@15.5.29 | MIT |
 | @swc/helpers@0.5.15 | Apache-2.0 |
 | @types/node@20.19.43 | MIT |
 | @types/pg@8.23.1 | MIT |
@@ -20,14 +20,14 @@ Généré par `npm run check:licenses`. Aucune licence GPL, LGPL ou AGPL (règle
 | color-name@1.1.4 | MIT |
 | decamelize@1.2.0 | MIT |
 | dijkstrajs@1.0.3 | MIT |
-| drizzle-orm@0.44.7 | Apache-2.0 |
+| drizzle-orm@0.45.4 | Apache-2.0 |
 | emoji-regex@8.0.0 | MIT |
 | find-up@4.1.0 | MIT |
 | get-caller-file@2.0.5 | ISC |
 | is-fullwidth-code-point@3.0.0 | MIT |
 | locate-path@5.0.0 | MIT |
 | nanoid@3.3.20 | MIT |
-| next@15.5.4 | MIT |
+| next@15.5.29 | MIT |
 | p-limit@2.3.0 | MIT |
 | p-locate@4.1.0 | MIT |
 | p-try@2.2.0 | MIT |
@@ -42,7 +42,7 @@ Généré par `npm run check:licenses`. Aucune licence GPL, LGPL ou AGPL (règle
 | pgpass@1.0.5 | MIT |
 | picocolors@1.1.1 | ISC |
 | pngjs@5.0.0 | MIT |
-| postcss@8.4.31 | MIT |
+| postcss@8.5.32 | MIT |
 | postgres-array@2.0.0 | MIT |
 | postgres-bytea@1.0.1 | MIT |
 | postgres-date@1.0.7 | MIT |
@@ -68,4 +68,4 @@ Généré par `npm run check:licenses`. Aucune licence GPL, LGPL ou AGPL (règle
 | y18n@4.0.3 | ISC |
 | yargs-parser@18.1.3 | ISC |
 | yargs@15.4.1 | MIT |
-| zod@3.25.76 | MIT |
+| zod@4.6.7 | MIT |
