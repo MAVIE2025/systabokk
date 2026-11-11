@@ -107,18 +107,19 @@ async function settle(opts: {
   api: ApiRow;
   consumerDevId: string;
   viaPrise: string | null;
+  canal: Canal;
   status: number;
   latencyMs: number;
   billed: boolean;
 }): Promise<number> {
-  const { api, consumerDevId, viaPrise, status, latencyMs, billed } = opts;
+  const { api, consumerDevId, viaPrise, canal, status, latencyMs, billed } = opts;
   const client = await pool.connect();
   try {
     await client.query("begin");
     const { rows } = await client.query<{ id: number }>(
-      `insert into calls (api_id, consumer_dev_id, via_prise, status, latency_ms, price_fcfa, billed)
-       values ($1, $2, $3, $4, $5, $6, $7) returning id`,
-      [api.id, consumerDevId, viaPrise, status, latencyMs, billed ? api.price_fcfa : 0, billed],
+      `insert into calls (api_id, consumer_dev_id, via_prise, canal, status, latency_ms, price_fcfa, billed)
+       values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`,
+      [api.id, consumerDevId, viaPrise, canal, status, latencyMs, billed ? api.price_fcfa : 0, billed],
     );
     const callId = rows[0].id;
 
@@ -239,7 +240,10 @@ const NO_FUNDS = (price: number) =>
   });
 
 /** Appel direct d'une API : /v1/apis/{slug}/… */
-export async function handleApiCall(req: Request, slug: string, subPath: string[]) {
+/** D'où vient un appel : API directe, agent IA (MCP) ou bouton « Essayer » du site. */
+export type Canal = "http" | "mcp" | "site";
+
+export async function handleApiCall(req: Request, slug: string, subPath: string[], canal: Canal = "http") {
   const consumer = await authenticate(req);
   if (!consumer) return NO_KEY();
 
@@ -261,6 +265,7 @@ export async function handleApiCall(req: Request, slug: string, subPath: string[
     api,
     consumerDevId: consumer,
     viaPrise: null,
+    canal,
     status: result.status,
     latencyMs: result.latencyMs,
     billed: result.ok,
@@ -286,7 +291,7 @@ export async function handleApiCall(req: Request, slug: string, subPath: string[
  * Les fournisseurs sont essayés par ordre de priorité ; si l'un tombe, on bascule
  * sur le suivant. Seul le fournisseur qui a répondu est facturé.
  */
-export async function handlePriseCall(req: Request, priseSlug: string, subPath: string[]) {
+export async function handlePriseCall(req: Request, priseSlug: string, subPath: string[], canal: Canal = "http") {
   const consumer = await authenticate(req);
   if (!consumer) return NO_KEY();
 
@@ -314,6 +319,7 @@ export async function handlePriseCall(req: Request, priseSlug: string, subPath: 
       api,
       consumerDevId: consumer,
       viaPrise: priseSlug,
+      canal,
       status: result.status,
       latencyMs: result.latencyMs,
       billed: result.ok,

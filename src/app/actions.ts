@@ -10,6 +10,7 @@ import { devConnecte, devParCle, effacerCle, poserCle } from "@/lib/session";
 import { verifierFormeUrl, verifierUrlPublique } from "@/lib/url-sure";
 import { pannes } from "@/lib/demo/pannes";
 import { baseInterne } from "@/lib/env";
+import { handleApiCall, handlePriseCall } from "@/lib/gateway";
 
 const CREDIT_BIENVENUE = 1000; // FCFA fictifs offerts à l'inscription (mode test)
 const RECHARGE_TEST = 2000;
@@ -190,13 +191,17 @@ export async function essayerApi(slug: string): Promise<ResultatEssai> {
   if (!a) return { erreur: "API introuvable." };
 
   const chemin = (a.prise_slug ? `/v1/prises/${a.prise_slug}` : `/v1/apis/${slug}`) + a.example_path;
-  const base = baseInterne();
-  const r = await fetch(base + chemin, {
+  const avecCorps = a.example_method !== "GET" && !!a.example_body;
+  const req = new Request(baseInterne() + chemin, {
     method: a.example_method,
-    headers: { authorization: `Bearer ${dev.cle}`, ...(a.example_body ? { "content-type": "application/json" } : {}) },
-    body: a.example_method !== "GET" && a.example_body ? a.example_body : undefined,
-    signal: AbortSignal.timeout(15000),
+    headers: { authorization: `Bearer ${dev.cle}`, ...(avecCorps ? { "content-type": "application/json" } : {}) },
+    body: avecCorps ? a.example_body! : undefined,
   });
+  const i = a.example_path.indexOf("?");
+  const segments = (i >= 0 ? a.example_path.slice(0, i) : a.example_path).split("/").filter(Boolean);
+  const r = a.prise_slug
+    ? await handlePriseCall(req, a.prise_slug, segments, "site")
+    : await handleApiCall(req, slug, segments, "site");
   const contentType = r.headers.get("content-type") ?? "";
   const texte = await r.text();
   revalidatePath("/espace");

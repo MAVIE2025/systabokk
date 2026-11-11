@@ -71,7 +71,14 @@ export default async function Jury({ searchParams }: { searchParams: Promise<{ i
           </div>
         </li>
         <li>
-          <h2 className="font-semibold">3. Regardez l&apos;argent circuler</h2>
+          <h2 className="font-semibold">3. Laissez une IA payer</h2>
+          <p className="mt-1 text-sm text-muted">
+            Branchez Claude ou Cursor sur SystaBokk avec la clé du Pass Jury : l&apos;agent trouve les API et les paie lui-même en FCFA.
+          </p>
+          <Link href="/agents" className="mt-3 inline-block rounded-full border border-line bg-card px-3 py-1 text-sm hover:border-accent">Configurer un agent IA</Link>
+        </li>
+        <li>
+          <h2 className="font-semibold">4. Regardez l&apos;argent circuler</h2>
           <p className="mt-1 text-sm text-muted">
             L&apos;<Link href="/" className="text-accent underline">accueil</Link> affiche en direct les appels traités et les FCFA versés aux créateurs.
           </p>

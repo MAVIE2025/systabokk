@@ -78,6 +78,7 @@ export const calls = pgTable(
     apiId: uuid("api_id").notNull().references(() => apis.id),
     consumerDevId: uuid("consumer_dev_id").notNull().references(() => devs.id),
     viaPrise: text("via_prise"),
+    canal: text("canal", { enum: ["http", "mcp", "site"] }).notNull().default("http"), // d'où vient l'appel
     status: integer("status").notNull(),
     latencyMs: integer("latency_ms").notNull(),
     priceFcfa: integer("price_fcfa").notNull(),

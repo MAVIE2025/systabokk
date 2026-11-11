@@ -26,6 +26,28 @@ Sur SystaBokk, on n'échange pas que du savoir : on échange **des services qui 
    plusieurs fournisseurs : si l'un tombe, la passerelle **bascule** sur le suivant, sans changer
    une ligne de code chez le client. Seul le fournisseur qui a répondu est facturé.
 
+## Agents IA : le MCP payant
+
+SystaBokk expose un **serveur MCP** sur `/mcp` (transport « Streamable HTTP », JSON-RPC 2.0, sans état).
+Un agent IA (Claude, Cursor…) authentifié avec la clé SystaBokk du développeur peut :
+
+| Outil | Rôle | Payant |
+| --- | --- | --- |
+| `rechercher_api` | Chercher dans le catalogue (prix, description, exemple d'appel) | Non |
+| `appeler_api` | Appeler une API à travers la passerelle | Oui, prix débité, 90 % au créateur |
+| `appeler_prise` | Appeler une prise standard, avec bascule automatique | Oui, seul le fournisseur qui répond est payé |
+| `mon_solde` | Solde, gains et dépenses | Non |
+
+Les appels d'un agent passent par **la même passerelle** que les autres (mêmes règles de facturation, même
+protection SSRF) ; ils sont marqués `canal = 'mcp'` en base. Testé avec le client MCP officiel
+(`@modelcontextprotocol/sdk`).
+
+```bash
+claude mcp add --transport http systabokk https://DOMAINE/mcp --header "Authorization: Bearer $CLE"
+```
+
+La page `/agents` du site donne la configuration prête à copier.
+
 ## Essayer
 
 ```bash
@@ -82,6 +104,7 @@ d'identifiants dans l'URL, et le nom de domaine doit résoudre uniquement vers d
 | `/espace` | Solde, gains, mes API, recharge de test |
 | `/publier` | Publier une API de tout type, prix libre, prise standard facultative |
 | `/jury` | Pass Jury : compte crédité, pannes simulées pour voir la bascule |
+| `/agents` | Agents IA : brancher Claude ou Cursor sur le serveur MCP payant |
 
 ```
 src/

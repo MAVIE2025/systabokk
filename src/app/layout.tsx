@@ -22,6 +22,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
               <Link href="/catalogue" className="hover:text-accent">Catalogue</Link>
               <Link href="/publier" className="hover:text-accent">Publier</Link>
+              <Link href="/agents" className="hover:text-accent">Agents IA</Link>
               <Link href="/jury" className="hover:text-accent">Pass Jury</Link>
               {dev ? (
                 <Link href="/espace" className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent">

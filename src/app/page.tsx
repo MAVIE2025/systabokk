@@ -38,6 +38,14 @@ export default async function Accueil() {
       </dl>
       <p className="mt-2 text-xs text-muted">Chiffres réels de la plateforme · paiements en mode test.</p>
 
+      <Link href="/agents" className="mt-10 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent bg-accent-soft p-5 hover:opacity-90">
+        <div>
+          <p className="text-sm font-medium text-accent">Nouveau · MCP</p>
+          <p className="mt-1 font-semibold">Les agents IA aussi paient à l&apos;appel : branchez Claude ou Cursor sur SystaBokk.</p>
+        </div>
+        <span className="text-sm font-medium text-accent">Découvrir →</span>
+      </Link>
+
       <section className="mt-16">
         <h2 className="text-lg font-semibold">Tout type d&apos;API</h2>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
