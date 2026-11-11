@@ -12,8 +12,7 @@ export default async function Accueil() {
     <div className="py-10 sm:py-16">
       <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.05fr]">
       <div>
-      <p className="text-sm font-medium text-ocre">Bokk · « partager » en wolof</p>
-      <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+      <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
         Ton code peut <span className="text-accent">te payer.</span>
       </h1>
       <p className="mt-4 max-w-xl text-lg text-muted">
