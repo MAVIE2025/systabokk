@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fcfa, getStats } from "@/lib/stats";
 import { CATEGORIES } from "@/lib/categories";
+import { HeroAnime } from "@/components/hero-anime";
 
 export const dynamic = "force-dynamic";
 
@@ -8,14 +9,16 @@ export default async function Accueil() {
   const s = await getStats();
 
   return (
-    <div className="py-12 sm:py-20">
+    <div className="py-10 sm:py-16">
+      <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.05fr]">
+      <div>
       <p className="text-sm font-medium text-ocre">Bokk · « partager » en wolof</p>
-      <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
-        Publie ton API. Gagne des FCFA à chaque appel.
+      <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+        Ton code peut <span className="text-accent">te payer.</span>
       </h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted">
-        Une seule clé pour toutes les API d&apos;Afrique : paiement, SMS, traduction, cartes, données,
-        documents… Hébergées à Dakar, payées à l&apos;usage par Mobile Money.
+      <p className="mt-4 max-w-xl text-lg text-muted">
+        Publie ton API une fois. Chaque fois qu&apos;un développeur — ou une IA — l&apos;utilise, tu gagnes des FCFA.
+        Une seule clé pour toutes les API d&apos;Afrique, hébergées à Dakar.
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
@@ -28,6 +31,9 @@ export default async function Accueil() {
         <Link href="/jury" className="px-2 py-3 text-sm text-muted underline hover:text-accent">
           Essayer avec le Pass Jury
         </Link>
+      </div>
+      </div>
+      <HeroAnime />
       </div>
 
       <dl className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
