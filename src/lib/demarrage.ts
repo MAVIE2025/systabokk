@@ -15,14 +15,14 @@ function expliquer(e: unknown): string {
     "28P01": "mot de passe ou utilisateur refusé : vérifiez DATABASE_URL",
     "08P01": "la base exige le SSL : ajoutez DATABASE_SSL=require",
     "28000": "utilisateur refusé : vérifiez le nom d'utilisateur dans DATABASE_URL",
-    ERR_INVALID_URL: "DATABASE_URL mal formée : le port est-il un nombre ? un caractère spécial du mot de passe (@ : / #) doit être encodé",
+    ERR_INVALID_URL: "DATABASE_URL mal formée (port non numérique ou caractère spécial dans le mot de passe) : utilisez plutôt PGHOST, PGPORT, PGUSER, PGPASSWORD et PGDATABASE",
     "3D000": "base de données inconnue : vérifiez le nom après le dernier « / »",
     ENOTFOUND: "nom d'hôte introuvable : vérifiez l'hôte dans DATABASE_URL",
     ECONNREFUSED: "connexion refusée : vérifiez le port, ou la base est arrêtée",
     ETIMEDOUT: "délai dépassé : port ou réseau bloqué",
     ECONNRESET: "connexion coupée : essayez DATABASE_SSL=require",
   };
-  if (!process.env.DATABASE_URL) return "DATABASE_URL n'est pas définie";
+  if (!process.env.DATABASE_URL && !process.env.PGHOST) return "ni DATABASE_URL ni PGHOST ne sont définies";
   return pistes[code] ? `${msg} (${code}) — ${pistes[code]}` : `${msg}${code ? ` (${code})` : ""}`;
 }
 

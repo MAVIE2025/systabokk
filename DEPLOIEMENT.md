@@ -19,6 +19,8 @@ npm run build
 npm start
 ```
 
+- Plus simple et sans encodage : à la place de `DATABASE_URL`, définissez `PGHOST`, `PGPORT`, `PGUSER`,
+  `PGPASSWORD` (entre apostrophes simples dans PowerShell) et `PGDATABASE`.
 - **Remplacez réellement** `VRAI_MOT_DE_PASSE` (bouton « Afficher » de la base) et `VRAI_PORT` (le **port public**,
   un nombre, visible quand la base accepte les connexions). Laisser ces mots tels quels provoque l'erreur
   `Invalid URL` au démarrage.
@@ -69,7 +71,11 @@ autorisez l'accès au dépôt `systabokk`, puis :
 
 | Nom | Valeur |
 | --- | --- |
-| `DATABASE_URL` | `postgres://UTILISATEUR:MOT_DE_PASSE@HOTE:PORT/BASE` (infos de l'étape 1) |
+| `PGHOST` | l'hôte public de la base (`postgres-dbaas-…systalinkdatabases.com`) |
+| `PGPORT` | le port public (un nombre) |
+| `PGUSER` | `systabokk_db_u` |
+| `PGPASSWORD` | le mot de passe de la base, tel quel (aucun encodage à faire) |
+| `PGDATABASE` | `systabokk_db` |
 | `DATABASE_SSL` | `require` (**obligatoire** : la base Systalink exige le SSL, même si sa fiche affiche « disable ») |
 | `PASS_JURY_KEY` | une clé longue qui commence par `sbk_live_` (voir ci-dessous) |
 | `DEMO_ADMIN_TOKEN` | un mot secret quelconque |
