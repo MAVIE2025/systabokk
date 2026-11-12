@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fcfa, getStats } from "@/lib/stats";
 import { HeroAnime } from "@/components/hero-anime";
+import { VideoBouton } from "@/components/video-bouton";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export default async function Accueil() {
           Essayer avec le Pass Jury
         </Link>
       </div>
+      <div className="mt-4"><VideoBouton /></div>
       </div>
       <HeroAnime />
       </div>

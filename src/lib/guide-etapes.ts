@@ -35,6 +35,7 @@ export const GUIDES: { cle: string; correspond: (chemin: string) => boolean; eta
       { cible: g("accueil-explorer"), titre: "Explorer les API", texte: "Ouvre le catalogue pour trouver une API et l'essayer." },
       { cible: g("accueil-publier"), titre: "Publier mon API", texte: "Ouvre le formulaire pour mettre votre API en ligne. Il faut un compte (gratuit)." },
       { cible: g("accueil-jury"), titre: "Essayer avec le Pass Jury", texte: "Le moyen le plus rapide de tout tester, sans inscription." },
+      { cible: g("accueil-video"), titre: "La vidéo de présentation", texte: "40 secondes pour comprendre SystaBokk avec une histoire concrète : Aminata publie, Issa utilise, tout le monde est payé. Elle s'ouvre en grand ; Échap pour la fermer." },
       { cible: g("accueil-chiffres"), titre: "Les chiffres réels", texte: "Nombre d'API, de développeurs, d'appels traités et total versé aux créateurs. Ils viennent directement de la base, rien n'est inventé." },
       { cible: g("accueil-mcp"), titre: "Pour les agents IA", texte: "SystaBokk parle aussi aux IA (protocole MCP). Cliquez pour voir comment brancher la vôtre." },
     ],
