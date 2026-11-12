@@ -4,6 +4,7 @@ import { devConnecte } from "@/lib/session";
 import { fcfa } from "@/lib/stats";
 import { deconnecter } from "@/app/actions";
 import { Guide } from "@/components/guide";
+import { NavOnglets } from "@/components/nav-onglets";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,38 +18,20 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="fr">
       <body className="flex min-h-screen flex-col antialiased">
         <header className="border-b border-line">
-          <nav className="mx-auto flex w-full px-4 sm:px-8 lg:px-12 2xl:px-20 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3">
+          <nav className="mx-auto flex w-full px-4 sm:px-8 lg:px-12 2xl:px-20 flex-wrap items-center justify-between gap-x-6 gap-y-3 py-3">
             <Link href="/" data-guide="nav-logo" className="text-lg font-semibold tracking-tight">
               <span className="text-accent">Systa</span><span className="text-ocre">Bokk</span>
             </Link>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm lg:ml-16 lg:flex-1 lg:justify-between lg:text-base">
-              <Link href="/" data-guide="nav-accueil" className="hover:text-accent">Accueil</Link>
-              <Link href="/catalogue" data-guide="nav-catalogue" className="hover:text-accent">Catalogue</Link>
-              <Link href="/publier" data-guide="nav-publier" className="hover:text-accent">Publier</Link>
-              <Link href="/agents" data-guide="nav-agents" className="hover:text-accent">Agents IA</Link>
-              <Link href="/jury" data-guide="nav-jury" className="hover:text-accent">Pass Jury</Link>
-              {dev ? (
-                <>
-                  {dev.estAdmin && (
-                    <Link href="/admin" data-guide="nav-admin" className="rounded-md bg-orange-50 px-2 py-1 font-medium text-ocre">
-                      Admin
-                    </Link>
-                  )}
-                  <Link href="/espace" data-guide="nav-compte" className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent">
-                    Mon compte · {fcfa(dev.balance)}
-                  </Link>
-                  <form action={deconnecter}>
-                    <button type="submit" data-guide="nav-deconnexion" className="hover:text-accent">Me déconnecter</button>
-                  </form>
-                </>
-              ) : (
-                <Link href="/espace" data-guide="nav-compte" className="hover:text-accent">Mon compte</Link>
-              )}
-              <a href="https://systalink.com" data-guide="nav-systalink" target="_blank" rel="noopener noreferrer"
-                className="rounded-md border border-accent px-2 py-1 font-medium text-accent hover:bg-accent hover:text-white">
-                Produits Systalink ↗
-              </a>
-            </div>
+            <NavOnglets
+              connecte={!!dev}
+              estAdmin={!!dev?.estAdmin}
+              solde={dev ? fcfa(dev.balance) : null}
+              deconnecter={deconnecter}
+            />
+            <a href="https://systalink.com" data-guide="nav-systalink" target="_blank" rel="noopener noreferrer"
+              className="rounded-full border border-accent px-4 py-1.5 text-sm font-medium whitespace-nowrap text-accent shadow-sm transition hover:bg-accent hover:text-white lg:text-base">
+              Produits Systalink ↗
+            </a>
           </nav>
         </header>
         <main className="mx-auto w-full px-4 sm:px-8 lg:px-12 2xl:px-20 flex-1">{children}</main>

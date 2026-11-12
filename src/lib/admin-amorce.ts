@@ -1,15 +1,25 @@
 import type { Pool } from "pg";
-import { hashApiKey } from "@/lib/keys";
+import { generateApiKey, hashApiKey } from "@/lib/keys";
 
 /**
  * Crée (ou retrouve) le compte administrateur Systalink à partir de ADMIN_KEY.
  * L'admin se connecte par le même portail que tout le monde (« Mon compte ») avec cette clé ;
  * son rôle « admin » fait alors apparaître l'onglet Admin.
- * Sans ADMIN_KEY valable, aucun admin n'est créé (on peut aussi en nommer depuis l'espace admin).
+ * Accès par défaut : sans ADMIN_KEY et tant qu'aucun admin n'existe, une clé admin aléatoire est
+ * générée au premier démarrage et affichée UNE fois dans les journaux du serveur (jamais dans le code,
+ * jamais en clair dans la base). Définir ADMIN_KEY ensuite permet de choisir sa propre clé.
  */
 export async function amorcerAdmin(pool: Pool): Promise<void> {
-  const cle = process.env.ADMIN_KEY?.trim();
-  if (!cle) return;
+  let cle = process.env.ADMIN_KEY?.trim();
+  if (!cle) {
+    const { rows } = await pool.query("select 1 from devs where role = 'admin' limit 1");
+    if (rows.length > 0) return; // un admin existe déjà : rien à faire
+    cle = generateApiKey().key;
+    const ligne = "=".repeat(72);
+    console.log(`\n${ligne}\n[démarrage] ACCÈS ADMIN PAR DÉFAUT créé (affiché une seule fois) :\n\n  ${cle}\n\n` +
+      `Collez cette clé dans « Mon compte » pour ouvrir l'espace Admin.\n` +
+      `Conservez-la, ou définissez ADMIN_KEY pour choisir la vôtre.\n${ligne}\n`);
+  }
   if (!cle.startsWith("sbk_") || cle.length < 32) {
     console.warn("[démarrage] ADMIN_KEY ignorée : elle doit commencer par « sbk_ » et faire 32 caractères au moins.");
     return;

@@ -78,7 +78,7 @@ autorisez l'accès au dépôt `systabokk`, puis :
 | `PGDATABASE` | `systabokk_db` |
 | `DATABASE_SSL` | `require` (**obligatoire** : la base Systalink exige le SSL, même si sa fiche affiche « disable ») |
 | `PASS_JURY_KEY` | une clé longue qui commence par `sbk_live_` (voir ci-dessous) |
-| `ADMIN_KEY` | **une autre** clé longue en `sbk_live_` : c'est votre accès à l'espace admin (gardez-la secrète) |
+| `ADMIN_KEY` | *(facultatif)* **une autre** clé longue en `sbk_live_` : votre accès à l'espace admin. Sans elle, une clé admin par défaut est générée au premier démarrage et affichée une fois dans les journaux |
 | `ADMIN_EMAIL` | l'e-mail du compte admin, ex. `admin@systabokk.dev` |
 | `DEMO_ADMIN_TOKEN` | un mot secret quelconque |
 | `CREATOR_SHARE_PERCENT` | `75` |
@@ -91,6 +91,11 @@ Lancez le déploiement. Dans les journaux, vous devez voir :
 
 **Espace admin** : sur le site, « Mon compte » → collez la valeur de `ADMIN_KEY` → l'onglet **Admin** apparaît
 (comptes, nouvelles clés, blocage, API, retraits des commissions, journal). Pour tout autre visiteur, `/admin` répond « page introuvable ».
+
+**Accès admin par défaut** : si `ADMIN_KEY` n'est pas définie et qu'aucun admin n'existe encore, le premier démarrage
+crée le compte admin et affiche sa clé **une seule fois** dans les journaux, encadrée par des `====` :
+`[démarrage] ACCÈS ADMIN PAR DÉFAUT créé`. Copiez-la tout de suite (elle n'est stockée nulle part en clair).
+Clé perdue ? Définissez `ADMIN_KEY` avec une nouvelle valeur et redémarrez : elle devient l'accès admin.
 
 ## 4. Nom de domaine (facultatif, -40 %)
 
