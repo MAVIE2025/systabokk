@@ -29,6 +29,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <Link href="/jury" data-guide="nav-jury" className="hover:text-accent">Pass Jury</Link>
               {dev ? (
                 <>
+                  {dev.estAdmin && (
+                    <Link href="/admin" data-guide="nav-admin" className="rounded-md bg-orange-50 px-2 py-1 font-medium text-ocre">
+                      Admin
+                    </Link>
+                  )}
                   <Link href="/espace" data-guide="nav-compte" className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent">
                     Mon compte · {fcfa(dev.balance)}
                   </Link>

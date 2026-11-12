@@ -2,6 +2,7 @@ import path from "node:path";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db, pool } from "@/db";
 import { seedDemo } from "@/lib/seed-demo";
+import { amorcerAdmin } from "@/lib/admin-amorce";
 
 const attendre = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -36,6 +37,7 @@ export async function demarrage() {
     try {
       await migrate(db, { migrationsFolder: path.join(process.cwd(), "drizzle") });
       console.log("[démarrage] migrations appliquées");
+      await amorcerAdmin(pool);
       if (process.env.SEED_DEMO !== "0") {
         const { cleJury } = await seedDemo(pool);
         console.log("[démarrage] données de démo prêtes");

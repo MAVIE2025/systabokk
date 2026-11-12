@@ -16,6 +16,9 @@ export const devs = pgTable("devs", {
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   country: text("country").notNull(), // code ISO : BF, SN, CI…
+  role: text("role", { enum: ["dev", "admin"] }).notNull().default("dev"), // « admin » ouvre l'espace Systalink
+  blockedAt: timestamp("blocked_at", { withTimezone: true }), // compte bloqué : clé refusée partout
+  blockedReason: text("blocked_reason"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -64,7 +67,8 @@ export const apis = pgTable(
     exampleMethod: text("example_method").notNull().default("GET"),
     examplePath: text("example_path").notNull().default(""), // ex. « ?montant=12500 » ou « /envois »
     exampleBody: text("example_body"), // JSON pour POST/PUT
-    isActive: boolean("is_active").notNull().default(true),
+    isActive: boolean("is_active").notNull().default(true), // false = suspendue (invisible, non appelable)
+    deletedAt: timestamp("deleted_at", { withTimezone: true }), // supprimée par l'admin (gardée pour l'historique des appels)
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("apis_prise_idx").on(t.priseSlug), index("apis_owner_idx").on(t.ownerDevId)],
@@ -96,7 +100,7 @@ export const ledger = pgTable(
     devId: uuid("dev_id").references(() => devs.id), // null = plateforme (commission)
     amountFcfa: integer("amount_fcfa").notNull(),
     kind: text("kind", {
-      enum: ["recharge", "reservation", "remboursement", "revenu", "commission"],
+      enum: ["recharge", "reservation", "remboursement", "revenu", "commission", "retrait"],
     }).notNull(),
     callId: integer("call_id"),
     note: text("note"),
@@ -115,4 +119,18 @@ export const probes = pgTable(
     latencyMs: integer("latency_ms").notNull(),
   },
   (t) => [primaryKey({ columns: [t.apiId, t.at] })],
+);
+
+/** Journal des actions de l'espace admin (qui a fait quoi, quand). */
+export const adminActions = pgTable(
+  "admin_actions",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    adminDevId: uuid("admin_dev_id").notNull().references(() => devs.id),
+    action: text("action").notNull(), // ex. « bloquer_compte », « supprimer_api », « retrait »
+    cible: text("cible"), // e-mail du compte ou slug de l'API concernée
+    details: text("details"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("admin_actions_created_idx").on(t.createdAt)],
 );

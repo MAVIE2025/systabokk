@@ -13,6 +13,8 @@ export type DevSession = {
   balance: number;
   earned: number;
   estJury: boolean;
+  estAdmin: boolean;
+  bloque: boolean;
   cle: string;
 };
 
@@ -20,20 +22,28 @@ export async function lireCle(): Promise<string | null> {
   return (await cookies()).get(COOKIE_CLE)?.value ?? null;
 }
 
-export async function devParCle(cle: string): Promise<DevSession | null> {
+/**
+ * Le dev qui possède cette clé, ou null (clé inconnue ou révoquée).
+ * Un compte bloqué est traité comme inconnu, sauf avec { inclureBloques: true }
+ * (utile pour afficher « compte bloqué » à la connexion).
+ */
+export async function devParCle(cle: string, opts: { inclureBloques?: boolean } = {}): Promise<DevSession | null> {
   const { rows } = await pool.query<{
     id: string; name: string; email: string; country: string; balance_fcfa: number; earned_fcfa: number; label: string;
+    role: string; blocked_at: Date | null;
   }>(
-    `select d.id, d.name, d.email, d.country, w.balance_fcfa, w.earned_fcfa, k.label
+    `select d.id, d.name, d.email, d.country, w.balance_fcfa, w.earned_fcfa, k.label, d.role, d.blocked_at
      from api_keys k join devs d on d.id = k.dev_id join wallets w on w.dev_id = d.id
      where k.key_hash = $1 and k.revoked_at is null`,
     [hashApiKey(cle)],
   );
   const r = rows[0];
   if (!r) return null;
+  if (r.blocked_at && !opts.inclureBloques) return null;
   return {
     id: r.id, name: r.name, email: r.email, country: r.country,
-    balance: r.balance_fcfa, earned: r.earned_fcfa, estJury: r.label === "Pass Jury", cle,
+    balance: r.balance_fcfa, earned: r.earned_fcfa, estJury: r.label === "Pass Jury",
+    estAdmin: r.role === "admin", bloque: !!r.blocked_at, cle,
   };
 }
 

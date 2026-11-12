@@ -63,7 +63,9 @@ export async function inscrire(_: EtatFormulaire, form: FormData): Promise<EtatF
 
 export async function connecter(_: EtatFormulaire, form: FormData): Promise<EtatFormulaire> {
   const cle = String(form.get("cle") ?? "").trim();
-  if (!cle.startsWith("sbk_") || !(await devParCle(cle))) return { erreur: "Clé inconnue ou révoquée." };
+  const dev = cle.startsWith("sbk_") ? await devParCle(cle, { inclureBloques: true }) : null;
+  if (!dev) return { erreur: "Clé inconnue ou révoquée." };
+  if (dev.bloque) return { erreur: "Ce compte est bloqué. Contactez Systalink pour en savoir plus." };
   await poserCle(cle);
   redirect("/espace");
 }

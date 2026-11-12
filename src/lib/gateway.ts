@@ -62,7 +62,8 @@ async function authenticate(req: Request): Promise<string | null> {
   const key = readApiKey(req.headers);
   if (!key) return null;
   const { rows } = await pool.query<{ dev_id: string }>(
-    "select dev_id from api_keys where key_hash = $1 and revoked_at is null",
+    `select k.dev_id from api_keys k join devs d on d.id = k.dev_id
+     where k.key_hash = $1 and k.revoked_at is null and d.blocked_at is null`,
     [hashApiKey(key)],
   );
   return rows[0]?.dev_id ?? null;

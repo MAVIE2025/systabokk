@@ -30,13 +30,13 @@ export default async function Espace() {
   }
 
   const { rows: apis } = await pool.query<{
-    slug: string; name: string; category: string; price_fcfa: number; appels: string; gains: string;
+    slug: string; name: string; category: string; price_fcfa: number; appels: string; gains: string; is_active: boolean;
   }>(
-    `select a.slug, a.name, a.category, a.price_fcfa,
+    `select a.slug, a.name, a.category, a.price_fcfa, a.is_active,
             (select count(*) from calls c where c.api_id = a.id and c.billed) as appels,
             (select coalesce(sum(l.amount_fcfa), 0) from ledger l join calls c on c.id = l.call_id
               where c.api_id = a.id and l.kind = 'revenu') as gains
-     from apis a where a.owner_dev_id = $1 order by a.created_at desc`,
+     from apis a where a.owner_dev_id = $1 and a.deleted_at is null order by a.created_at desc`,
     [dev.id],
   );
   const { rows: depenses } = await pool.query<{ n: string; total: string }>(
@@ -53,6 +53,13 @@ export default async function Espace() {
         </div>
         <form action={deconnecter}><button className="text-sm text-muted underline">Se déconnecter</button></form>
       </div>
+
+      {dev.estAdmin && (
+        <Link href="/admin" data-guide="esp-admin" className="mt-6 flex items-center justify-between gap-3 rounded-xl border border-ocre bg-orange-50 p-4 hover:opacity-90">
+          <span><span className="font-semibold text-ocre">Accès administrateur Systalink</span><br /><span className="text-sm text-muted">Comptes, clés, API, gains de la plateforme et journal.</span></span>
+          <span className="font-medium text-ocre">Ouvrir l&apos;espace admin →</span>
+        </Link>
+      )}
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
         <div data-guide="esp-solde" className="rounded-xl border border-accent bg-accent-soft p-4">
@@ -94,7 +101,10 @@ export default async function Espace() {
             <tbody>
               {apis.map((a) => (
                 <tr key={a.slug} className="border-t border-line">
-                  <td className="p-3"><Link href={`/catalogue/${a.slug}`} className="font-medium hover:text-accent">{a.name}</Link></td>
+                  <td className="p-3">
+                    <Link href={`/catalogue/${a.slug}`} className="font-medium hover:text-accent">{a.name}</Link>
+                    {!a.is_active && <span className="ml-2 rounded bg-red-50 px-1.5 py-0.5 text-xs text-red-700">suspendue par Systalink</span>}
+                  </td>
                   <td className="p-3 text-muted">{nomCategorie(a.category)}</td>
                   <td className="p-3 text-right tabular-nums">{fcfa(a.price_fcfa)}</td>
                   <td className="p-3 text-right tabular-nums">{Number(a.appels).toLocaleString("fr-FR")}</td>

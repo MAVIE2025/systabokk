@@ -78,6 +78,8 @@ autorisez l'accès au dépôt `systabokk`, puis :
 | `PGDATABASE` | `systabokk_db` |
 | `DATABASE_SSL` | `require` (**obligatoire** : la base Systalink exige le SSL, même si sa fiche affiche « disable ») |
 | `PASS_JURY_KEY` | une clé longue qui commence par `sbk_live_` (voir ci-dessous) |
+| `ADMIN_KEY` | **une autre** clé longue en `sbk_live_` : c'est votre accès à l'espace admin (gardez-la secrète) |
+| `ADMIN_EMAIL` | l'e-mail du compte admin, ex. `admin@systabokk.dev` |
 | `DEMO_ADMIN_TOKEN` | un mot secret quelconque |
 | `CREATOR_SHARE_PERCENT` | `75` |
 
@@ -85,7 +87,10 @@ Pour fabriquer une clé dans PowerShell :
 `"sbk_live_" + -join ((48..57)+(65..90)+(97..122) | Get-Random -Count 32 | % {[char]$_})`
 
 Lancez le déploiement. Dans les journaux, vous devez voir :
-`[démarrage] migrations appliquées` puis `[démarrage] données de démo prêtes`.
+`[démarrage] migrations appliquées`, `[démarrage] compte admin prêt` puis `[démarrage] données de démo prêtes`.
+
+**Espace admin** : sur le site, « Mon compte » → collez la valeur de `ADMIN_KEY` → l'onglet **Admin** apparaît
+(comptes, nouvelles clés, blocage, API, retraits des commissions, journal). Pour tout autre visiteur, `/admin` répond « page introuvable ».
 
 ## 4. Nom de domaine (facultatif, -40 %)
 

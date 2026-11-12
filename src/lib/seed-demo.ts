@@ -32,7 +32,7 @@ export async function seedDemo(pool: Pool): Promise<{ cleJury: string }> {
          upstream_url = excluded.upstream_url, price_fcfa = excluded.price_fcfa,
          prise_slug = excluded.prise_slug, prise_priority = excluded.prise_priority,
          example_method = excluded.example_method, example_path = excluded.example_path,
-         example_body = excluded.example_body, is_active = true`,
+         example_body = excluded.example_body`,
       [a.slug, a.name, a.description, a.category, a.countries, a.owner, a.upstream, a.price,
        a.prise ?? null, a.priority ?? 100, a.method ?? "GET", a.path ?? "", a.body ? JSON.stringify(a.body, null, 2) : null],
     );

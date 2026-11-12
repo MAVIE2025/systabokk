@@ -15,6 +15,8 @@ DATABASE_URL=postgres://systabokk:$MDP_DB@db:5432/systabokk
 INTERNAL_BASE_URL=http://127.0.0.1:3000
 CREATOR_SHARE_PERCENT=75
 PASS_JURY_KEY=sbk_live_$(aleatoire 32)
+ADMIN_KEY=sbk_live_$(aleatoire 40)
+ADMIN_EMAIL=admin@systabokk.dev
 DEMO_ADMIN_TOKEN=$(aleatoire 24)
 FIN
 chmod 600 .env
