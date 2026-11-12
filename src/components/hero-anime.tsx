@@ -196,7 +196,7 @@ export function HeroAnime() {
         </div>
       </div>
 
-      <svg viewBox="0 -24 520 364" className="mt-2 w-full" role="img"
+      <svg viewBox="0 -24 520 364" className="mx-auto mt-2 max-h-[52vh] w-full" role="img"
         aria-label="Animation : un appel d'API passe par SystaBokk et paie son créateur ; en cas de panne, bascule sur un autre fournisseur ; un agent IA paie aussi.">
         <defs>
           <style>{`@keyframes monte{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-26px)}}`}</style>

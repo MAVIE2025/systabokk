@@ -70,7 +70,7 @@ export default async function Catalogue({ searchParams }: { searchParams: Promis
       </div>
 
       {apis.length === 0 && <p className="mt-8 text-muted">Aucune API ne correspond.</p>}
-      <ul data-guide="cat-liste" className="mt-6 grid gap-4 sm:grid-cols-2">
+      <ul data-guide="cat-liste" className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {apis.map((a) => (
           <li key={a.slug}>
             <Link href={`/catalogue/${a.slug}`} className="block h-full rounded-xl border border-line bg-card p-5 hover:border-accent">

@@ -15,9 +15,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const dev = await devConnecte();
   return (
     <html lang="fr">
-      <body className="min-h-screen antialiased">
+      <body className="flex min-h-screen flex-col antialiased">
         <header className="border-b border-line">
-          <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-4 py-3">
+          <nav className="mx-auto flex w-full px-4 sm:px-8 lg:px-12 2xl:px-20 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3">
             <Link href="/" data-guide="nav-logo" className="text-lg font-semibold tracking-tight">
               <span className="text-accent">Systa</span><span className="text-ocre">Bokk</span>
             </Link>
@@ -46,8 +46,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             </div>
           </nav>
         </header>
-        <main className="mx-auto max-w-5xl px-4">{children}</main>
-        <footer className="mx-auto max-w-5xl px-4 py-10 text-xs text-muted">
+        <main className="mx-auto w-full px-4 sm:px-8 lg:px-12 2xl:px-20 flex-1">{children}</main>
+        <footer className="mx-auto w-full px-4 sm:px-8 lg:px-12 2xl:px-20 py-6 text-xs text-muted">
           Projet CADEV 2026 · hébergé sur Systalink Datacloud, Dakar · paiements en mode test
         </footer>
         <Guide connecte={!!dev} />
