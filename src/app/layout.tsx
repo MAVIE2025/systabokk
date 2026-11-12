@@ -21,7 +21,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <Link href="/" data-guide="nav-logo" className="text-lg font-semibold tracking-tight">
               <span className="text-accent">Systa</span><span className="text-ocre">Bokk</span>
             </Link>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm lg:ml-16 lg:flex-1 lg:justify-between lg:text-base">
               <Link href="/" data-guide="nav-accueil" className="hover:text-accent">Accueil</Link>
               <Link href="/catalogue" data-guide="nav-catalogue" className="hover:text-accent">Catalogue</Link>
               <Link href="/publier" data-guide="nav-publier" className="hover:text-accent">Publier</Link>
