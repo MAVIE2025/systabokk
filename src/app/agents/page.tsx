@@ -38,7 +38,7 @@ export default async function Agents() {
         les appelle et paie en FCFA avec votre clé. Chaque appel rémunère un développeur africain.
       </p>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div data-guide="ag-chiffres" className="mt-6 grid gap-3 sm:grid-cols-3">
         <div className="rounded-xl border border-accent bg-accent-soft p-4">
           <p className="text-xs text-muted">Appels payés par des agents IA</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums">{stats.appels.toLocaleString("fr-FR")}</p>
@@ -53,7 +53,7 @@ export default async function Agents() {
         </div>
       </div>
 
-      <section className="mt-10">
+      <section data-guide="ag-outils" className="mt-10">
         <h2 className="text-lg font-semibold">Les outils que l&apos;agent reçoit</h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {OUTILS.map((o) => (
@@ -65,7 +65,7 @@ export default async function Agents() {
         </div>
       </section>
 
-      <section className="mt-10 grid gap-6 lg:grid-cols-2">
+      <section data-guide="ag-config" className="mt-10 grid gap-6 lg:grid-cols-2">
         <div>
           <h2 className="text-lg font-semibold">Claude Code</h2>
           <p className="mt-1 text-sm text-muted">Une commande dans le terminal :</p>
@@ -83,12 +83,12 @@ export default async function Agents() {
           : <>Remplacez VOTRE_CLE_SYSTABOKK par votre clé. <Link href="/inscription" className="text-accent underline">Créez un compte</Link> ou <Link href="/jury" className="text-accent underline">essayez avec le Pass Jury</Link>.</>}
       </p>
 
-      <section className="mt-10 rounded-xl border border-line bg-card p-5">
+      <section data-guide="ag-exemple" className="mt-10 rounded-xl border border-line bg-card p-5">
         <h2 className="font-semibold">Exemple de conversation</h2>
         <div className="mt-3 space-y-3 text-sm">
           <p><b>Vous :</b> Écris en lettres 1 250 000 FCFA pour ma facture, puis envoie un SMS de confirmation au +226 70 12 34 56.</p>
-          <p className="text-muted"><b className="text-foreground">Agent :</b> j&apos;appelle <span className="font-mono">montant-en-lettres</span> (2 FCFA) puis la prise <span className="font-mono">sms</span> (15 FCFA)…
-            « un million deux cent cinquante mille francs CFA ». SMS envoyé via le fournisseur A. Total : 17 FCFA, payés aux deux créateurs.</p>
+          <p className="text-muted"><b className="text-foreground">Agent :</b> j&apos;appelle <span className="font-mono">montant-en-lettres</span> (4 FCFA) puis la prise <span className="font-mono">sms</span> (12 FCFA)…
+            « un million deux cent cinquante mille francs CFA ». SMS envoyé via le fournisseur A. Total : 16 FCFA, dont 75 % pour les deux créateurs.</p>
         </div>
       </section>
 

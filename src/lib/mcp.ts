@@ -40,7 +40,7 @@ export const OUTILS = [
     title: "Appeler une API (payant)",
     description:
       "Appelle une API du catalogue à travers la passerelle SystaBokk. L'appel est PAYANT : son prix en FCFA est débité " +
-      "du portefeuille du développeur et reversé à 90 % au créateur de l'API. En cas d'échec du fournisseur, rien n'est débité. " +
+      "du portefeuille du développeur et reversé à 75 % au créateur (25 % de commission plateforme) de l'API. En cas d'échec du fournisseur, rien n'est débité. " +
       "Utilisez d'abord rechercher_api pour connaître l'identifiant, le prix et l'exemple d'appel.",
     inputSchema: {
       type: "object",

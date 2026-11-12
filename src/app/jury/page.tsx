@@ -21,7 +21,7 @@ export default async function Jury({ searchParams }: { searchParams: Promise<{ i
           à travers la passerelle SystaBokk.
         </p>
         {indisponible && <p className="mt-4 text-sm text-red-700">Le Pass Jury n&apos;est pas configuré sur ce serveur.</p>}
-        <form action={entrerJury} className="mt-6"><button className={bouton}>Entrer avec le Pass Jury</button></form>
+        <form action={entrerJury} data-guide="jury-entrer" className="mt-6"><button className={bouton}>Entrer avec le Pass Jury</button></form>
       </div>
     );
   }
@@ -44,10 +44,10 @@ export default async function Jury({ searchParams }: { searchParams: Promise<{ i
   return (
     <div className="py-10">
       <h1 className="text-2xl font-semibold">Bienvenue, membre du jury</h1>
-      <p className="mt-1 text-muted">Solde de démonstration : <b>{fcfa(dev.balance)}</b> (FCFA de test, aucun argent réel).</p>
+      <p data-guide="jury-solde" className="mt-1 text-muted">Solde de démonstration : <b>{fcfa(dev.balance)}</b> (FCFA de test, aucun argent réel).</p>
 
       <ol className="mt-8 space-y-6">
-        <li>
+        <li data-guide="jury-etape1" >
           <h2 className="font-semibold">1. Appelez une API</h2>
           <p className="mt-1 text-sm text-muted">Ouvrez une fiche et cliquez sur « Essayer » : l&apos;appel est réel, il est facturé et le créateur est payé.</p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
@@ -56,12 +56,12 @@ export default async function Jury({ searchParams }: { searchParams: Promise<{ i
             ))}
           </div>
         </li>
-        <li>
+        <li data-guide="jury-etape2" >
           <h2 className="font-semibold">2. Provoquez une panne</h2>
           <p className="mt-1 text-sm text-muted">
             Coupez le fournisseur A, puis essayez la prise : la passerelle bascule seule sur B, et seul B est facturé.
           </p>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div data-guide="jury-pannes" className="mt-3 grid gap-3 sm:grid-cols-2">
             <Panne cle="paiement-a" titre="Paiement mobile — Fournisseur A" />
             <Panne cle="sms-a" titre="SMS — Fournisseur A" />
           </div>
@@ -70,14 +70,14 @@ export default async function Jury({ searchParams }: { searchParams: Promise<{ i
             <Link href="/catalogue/sms-a" className="rounded-full border border-line bg-card px-3 py-1 hover:border-accent">Essayer la prise SMS</Link>
           </div>
         </li>
-        <li>
+        <li data-guide="jury-etape3" >
           <h2 className="font-semibold">3. Laissez une IA payer</h2>
           <p className="mt-1 text-sm text-muted">
             Branchez Claude ou Cursor sur SystaBokk avec la clé du Pass Jury : l&apos;agent trouve les API et les paie lui-même en FCFA.
           </p>
           <Link href="/agents" className="mt-3 inline-block rounded-full border border-line bg-card px-3 py-1 text-sm hover:border-accent">Configurer un agent IA</Link>
         </li>
-        <li>
+        <li data-guide="jury-etape4" >
           <h2 className="font-semibold">4. Regardez l&apos;argent circuler</h2>
           <p className="mt-1 text-sm text-muted">
             L&apos;<Link href="/" className="text-accent underline">accueil</Link> affiche en direct les appels traités et les FCFA versés aux créateurs.

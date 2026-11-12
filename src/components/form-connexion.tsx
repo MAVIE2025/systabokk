@@ -11,7 +11,7 @@ export function FormConnexion() {
       <Etiquette htmlFor="cle">Votre clé SystaBokk</Etiquette>
       <input id="cle" name="cle" required className={champ} placeholder="sbk_live_…" autoComplete="off" />
       <Erreur texte={etat.erreur} />
-      <button className={bouton} disabled={enCours}>Se connecter</button>
+      <button data-guide="cnx-bouton" className={bouton} disabled={enCours}>Se connecter</button>
     </form>
   );
 }

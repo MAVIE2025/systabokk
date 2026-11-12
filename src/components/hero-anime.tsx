@@ -9,12 +9,12 @@ import { useEffect, useRef, useState } from "react";
  * Respecte « réduire les animations » : affiche alors une version fixe.
  */
 
-const PART_CREATEUR = 9; // 90 %
+const PART_CREATEUR = 15; // 75 % de 20 FCFA (la plateforme garde 25 %)
 
 type Phase = 0 | 1 | 2 | 3;
 const LEGENDES: Record<Phase, { titre: string; texte: string }> = {
-  0: { titre: "Je publie", texte: "Aminata, à Ouagadougou, publie son API « Montant en lettres » : 10 FCFA par appel." },
-  1: { titre: "On l'utilise", texte: "Issa, à Abidjan, l'appelle avec sa clé SystaBokk. À chaque appel, Aminata touche 9 FCFA." },
+  0: { titre: "Je publie", texte: "Aminata, à Ouagadougou, publie son API « Montant en lettres » : 20 FCFA par appel." },
+  1: { titre: "On l'utilise", texte: "Issa, à Abidjan, l'appelle avec sa clé SystaBokk. À chaque appel de 20 FCFA, Aminata touche 15 FCFA." },
   2: { titre: "Rien ne casse", texte: "L'API d'Aminata tombe en panne ? SystaBokk bascule sur celle de Moussa, à Dakar. Seul Moussa est payé." },
   3: { titre: "Même les IA paient", texte: "Un agent IA, lancé depuis Yaoundé, trouve l'API, l'appelle… et paie en FCFA. Peu importe d'où vous êtes." },
 };
@@ -183,14 +183,14 @@ export function HeroAnime() {
   };
 
   return (
-    <div className="rounded-2xl border border-line bg-card p-4 shadow-sm sm:p-5">
+    <div data-guide="accueil-anim" className="rounded-2xl border border-line bg-card p-4 shadow-sm sm:p-5">
       <div className="flex items-center justify-between gap-3">
         <div className="flex gap-1.5" aria-hidden>
           {([0, 1, 2, 3] as Phase[]).map((p) => (
             <span key={p} className={`h-1.5 rounded-full transition-all duration-300 ${p === phase ? "w-6 bg-accent" : "w-1.5 bg-line"}`} />
           ))}
         </div>
-        <div className="flex gap-3 text-xs tabular-nums">
+        <div data-guide="accueil-gains" className="flex gap-3 text-xs tabular-nums">
           <span className="text-muted">Aminata <b className="text-foreground">{gainsA} FCFA</b></span>
           <span className="text-muted">Moussa <b className="text-foreground">{gainsB} FCFA</b></span>
         </div>

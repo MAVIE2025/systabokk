@@ -40,8 +40,8 @@ const DROP_RESPONSE_HEADERS = new Set([
 ]);
 
 function creatorSharePercent() {
-  const n = Number(process.env.CREATOR_SHARE_PERCENT ?? 90);
-  return Number.isFinite(n) && n >= 0 && n <= 100 ? n : 90;
+  const n = Number(process.env.CREATOR_SHARE_PERCENT ?? 75);
+  return Number.isFinite(n) && n >= 0 && n <= 100 ? n : 75;
 }
 
 /** Répartit un prix entre créateur et plateforme. Le créateur est arrondi à l'inférieur. */

@@ -19,7 +19,7 @@ export function FormPublier({ prises }: { prises: Prise[] }) {
         <h2 className="font-semibold">Votre API est publiée</h2>
         <p className="mt-1 text-sm text-muted">Elle est dans le catalogue. Chaque appel crédite votre portefeuille.</p>
         <p className="mt-3 text-sm">Adresse pour vos utilisateurs :</p>
-        <code className="mt-1 block break-all rounded-md bg-card p-3 text-sm">/v1/apis/{etat.slug}</code>
+        <code data-guide="pub-adresse" className="mt-1 block break-all rounded-md bg-card p-3 text-sm">/v1/apis/{etat.slug}</code>
         <div className="mt-4 flex gap-3">
           <Link href={`/catalogue/${etat.slug}`} className={bouton}>Voir la fiche</Link>
           <Link href="/espace" className="rounded-lg border border-line bg-card px-4 py-2.5 font-medium">Mon espace</Link>
@@ -55,13 +55,13 @@ export function FormPublier({ prises }: { prises: Prise[] }) {
           </div>
           <div>
             <Etiquette htmlFor="priceFcfa">Prix par appel (FCFA)</Etiquette>
-            <input id="priceFcfa" name="priceFcfa" type="number" min={1} max={100000} required defaultValue={5} className={champ} />
-            <p className="mt-1 text-xs text-muted">Vous recevez 90 % de chaque appel.</p>
+            <input id="priceFcfa" name="priceFcfa" type="number" min={4} max={100000} required defaultValue={8} className={champ} />
+            <p className="mt-1 text-xs text-muted">Vous recevez 75 % de chaque appel, la plateforme garde 25 %. Minimum 4 FCFA.</p>
           </div>
         </div>
         <div>
           <span className="mb-1 block text-sm font-medium">Pays couverts</span>
-          <div className="flex flex-wrap gap-2">
+          <div data-guide="pub-pays" className="flex flex-wrap gap-2">
             {PAYS_PUBLICATION.map((p) => (
               <label key={p} className="flex items-center gap-1.5 rounded-md border border-line bg-card px-2.5 py-1.5 text-sm">
                 <input type="checkbox" name="countries" value={p} defaultChecked={p === "BF"} /> {p}
@@ -121,7 +121,7 @@ export function FormPublier({ prises }: { prises: Prise[] }) {
       </fieldset>
 
       <Erreur texte={etat.erreur} />
-      <button className={bouton} disabled={enCours}>{enCours ? "Vérification…" : "Publier l'API"}</button>
+      <button data-guide="pub-bouton" className={bouton} disabled={enCours}>{enCours ? "Vérification…" : "Publier l'API"}</button>
     </form>
   );
 }

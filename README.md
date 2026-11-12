@@ -21,7 +21,7 @@ Sur SystaBokk, on n'échange pas que du savoir : on échange **des services qui 
 1. **Publier.** Un dev publie son API — **de n'importe quel type** : paiement, SMS, traduction, cartes,
    données, documents… — hébergée sur Systalink, et fixe son prix par appel, en FCFA.
 2. **Utiliser.** Les autres l'appellent avec **une seule clé**, valable pour tout le catalogue.
-3. **Gagner.** Chaque appel crédite le créateur (90 %) ; la plateforme garde une commission (10 %).
+3. **Gagner.** Chaque appel crédite le créateur (75 %) ; la plateforme garde une commission (25 %).
 4. **Prises standard.** Une interface commune par besoin (ex. `paiement-mobile`) servie par
    plusieurs fournisseurs : si l'un tombe, la passerelle **bascule** sur le suivant, sans changer
    une ligne de code chez le client. Seul le fournisseur qui a répondu est facturé.
@@ -34,7 +34,7 @@ Un agent IA (Claude, Cursor…) authentifié avec la clé SystaBokk du développ
 | Outil | Rôle | Payant |
 | --- | --- | --- |
 | `rechercher_api` | Chercher dans le catalogue (prix, description, exemple d'appel) | Non |
-| `appeler_api` | Appeler une API à travers la passerelle | Oui, prix débité, 90 % au créateur |
+| `appeler_api` | Appeler une API à travers la passerelle | Oui, prix débité, 75 % au créateur |
 | `appeler_prise` | Appeler une prise standard, avec bascule automatique | Oui, seul le fournisseur qui répond est payé |
 | `mon_solde` | Solde, gains et dépenses | Non |
 
@@ -51,13 +51,13 @@ La page `/agents` du site donne la configuration prête à copier.
 ## Essayer
 
 ```bash
-# Montant en lettres (2 FCFA)
+# Montant en lettres (4 FCFA)
 curl -H "Authorization: Bearer $CLE" "https://DOMAINE/v1/apis/montant-en-lettres?montant=12500"
 
-# Validation de numéro (1 FCFA)
+# Validation de numéro (4 FCFA)
 curl -H "X-Api-Key: $CLE" "https://DOMAINE/v1/apis/telephone?numero=70123456&pays=BF"
 
-# Prise standard « paiement mobile » (25 FCFA, mode test)
+# Prise standard « paiement mobile » (20 FCFA, mode test)
 curl -H "Authorization: Bearer $CLE" -H "content-type: application/json" \
   -d '{"montant":5000,"telephone":"+22670123456","reference":"CMD-1"}' \
   https://DOMAINE/v1/prises/paiement-mobile/paiements

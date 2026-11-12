@@ -11,7 +11,7 @@ export default async function Accueil() {
     <div className="py-10 sm:py-16">
       <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.05fr]">
       <div>
-      <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+      <h1 data-guide="accueil-titre" className="text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
         Ton code peut <span className="text-accent">te payer.</span>
       </h1>
       <p className="mt-4 max-w-xl text-lg text-muted">
@@ -20,13 +20,13 @@ export default async function Accueil() {
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/catalogue" className="rounded-lg bg-accent px-5 py-3 font-medium text-white hover:opacity-90">
+        <Link href="/catalogue" data-guide="accueil-explorer" className="rounded-lg bg-accent px-5 py-3 font-medium text-white hover:opacity-90">
           Explorer les API
         </Link>
-        <Link href="/publier" className="rounded-lg border border-line bg-card px-5 py-3 font-medium hover:border-accent">
+        <Link href="/publier" data-guide="accueil-publier" className="rounded-lg border border-line bg-card px-5 py-3 font-medium hover:border-accent">
           Publier mon API
         </Link>
-        <Link href="/jury" className="px-2 py-3 text-sm text-muted underline hover:text-accent">
+        <Link href="/jury" data-guide="accueil-jury" className="px-2 py-3 text-sm text-muted underline hover:text-accent">
           Essayer avec le Pass Jury
         </Link>
       </div>
@@ -34,7 +34,7 @@ export default async function Accueil() {
       <HeroAnime />
       </div>
 
-      <dl className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <dl data-guide="accueil-chiffres" className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="API publiées" value={s.apis.toLocaleString("fr-FR")} />
         <Stat label="Devs inscrits" value={s.devs.toLocaleString("fr-FR")} />
         <Stat label="Appels traités" value={s.appels.toLocaleString("fr-FR")} />
@@ -42,7 +42,7 @@ export default async function Accueil() {
       </dl>
       <p className="mt-2 text-xs text-muted">Chiffres réels de la plateforme · paiements en mode test.</p>
 
-      <Link href="/agents" className="mt-10 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent bg-accent-soft p-5 hover:opacity-90">
+      <Link href="/agents" data-guide="accueil-mcp" className="mt-10 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent bg-accent-soft p-5 hover:opacity-90">
         <div>
           <p className="text-sm font-medium text-accent">Nouveau · MCP</p>
           <p className="mt-1 font-semibold">Les agents IA aussi paient à l&apos;appel : branchez Claude ou Cursor sur SystaBokk.</p>

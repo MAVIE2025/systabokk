@@ -20,7 +20,7 @@ export default async function Espace() {
           <p className="mt-1 text-muted">Connectez-vous avec la clé reçue à l&apos;inscription.</p>
           <div className="mt-6"><FormConnexion /></div>
         </div>
-        <div className="rounded-xl border border-line bg-card p-5">
+        <div data-guide="esp-creer" className="rounded-xl border border-line bg-card p-5">
           <h2 className="font-semibold">Pas encore de compte ?</h2>
           <p className="mt-1 text-sm text-muted">Créez-le en 30 secondes : nom, e-mail, pays.</p>
           <Link href="/inscription" className={`mt-4 inline-block ${bouton}`}>Créer un compte</Link>
@@ -49,34 +49,34 @@ export default async function Espace() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">Bonjour {dev.name}</h1>
-          <p className="text-muted">Clé : {dev.cle.slice(0, 13)}… · {dev.country}</p>
+          <p data-guide="esp-cle" className="text-muted">Clé : {dev.cle.slice(0, 13)}… · {dev.country}</p>
         </div>
         <form action={deconnecter}><button className="text-sm text-muted underline">Se déconnecter</button></form>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-accent bg-accent-soft p-4">
+        <div data-guide="esp-solde" className="rounded-xl border border-accent bg-accent-soft p-4">
           <p className="text-xs text-muted">Solde du portefeuille</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums">{fcfa(dev.balance)}</p>
           {!dev.estJury && (
             <form action={rechargerTest} className="mt-3">
-              <button className="text-sm font-medium text-accent underline">+ Recharger 2 000 FCFA (test)</button>
+              <button data-guide="esp-recharger" className="text-sm font-medium text-accent underline">+ Recharger 2 000 FCFA (test)</button>
             </form>
           )}
         </div>
-        <div className="rounded-xl border border-line bg-card p-4">
+        <div data-guide="esp-gagne" className="rounded-xl border border-line bg-card p-4">
           <p className="text-xs text-muted">Gagné avec mes API</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums">{fcfa(dev.earned)}</p>
           <p className="mt-3 text-xs text-muted">Retrait Mobile Money ou crédits Systalink (bientôt)</p>
         </div>
-        <div className="rounded-xl border border-line bg-card p-4">
+        <div data-guide="esp-appels" className="rounded-xl border border-line bg-card p-4">
           <p className="text-xs text-muted">Mes appels</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums">{Number(depenses[0].n).toLocaleString("fr-FR")}</p>
           <p className="mt-3 text-xs text-muted">{fcfa(Number(depenses[0].total))} dépensés</p>
         </div>
       </div>
 
-      <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
+      <div data-guide="esp-apis" className="mt-10 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Mes API publiées</h2>
         {!dev.estJury && <Link href="/publier" className={bouton}>Publier une API</Link>}
       </div>
@@ -105,7 +105,7 @@ export default async function Espace() {
           </table>
         </div>
       )}
-      <Link href="/catalogue" className={`mt-8 inline-block ${boutonSecondaire}`}>Explorer le catalogue</Link>
+      <Link href="/catalogue" data-guide="esp-explorer" className={`mt-8 inline-block ${boutonSecondaire}`}>Explorer le catalogue</Link>
     </div>
   );
 }

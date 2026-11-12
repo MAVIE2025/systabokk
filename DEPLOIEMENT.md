@@ -79,7 +79,7 @@ autorisez l'accès au dépôt `systabokk`, puis :
 | `DATABASE_SSL` | `require` (**obligatoire** : la base Systalink exige le SSL, même si sa fiche affiche « disable ») |
 | `PASS_JURY_KEY` | une clé longue qui commence par `sbk_live_` (voir ci-dessous) |
 | `DEMO_ADMIN_TOKEN` | un mot secret quelconque |
-| `CREATOR_SHARE_PERCENT` | `90` |
+| `CREATOR_SHARE_PERCENT` | `75` |
 
 Pour fabriquer une clé dans PowerShell :
 `"sbk_live_" + -join ((48..57)+(65..90)+(97..122) | Get-Random -Count 32 | % {[char]$_})`

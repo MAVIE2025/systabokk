@@ -56,11 +56,11 @@ export default async function Catalogue({ searchParams }: { searchParams: Promis
         </div>
         <form className="flex gap-2">
           {categorie && <input type="hidden" name="categorie" value={categorie} />}
-          <input name="q" defaultValue={q} placeholder="Rechercher…" className="rounded-lg border border-line bg-card px-3 py-2 text-sm" />
+          <input data-guide="cat-recherche" name="q" defaultValue={q} placeholder="Rechercher…" className="rounded-lg border border-line bg-card px-3 py-2 text-sm" />
         </form>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div data-guide="cat-filtres" className="mt-5 flex flex-wrap gap-2">
         <Link href="/catalogue" className={chip(!categorie)}>Toutes</Link>
         {CATEGORIES.filter((c) => comptes[c.slug]).map((c) => (
           <Link key={c.slug} href={`/catalogue?categorie=${c.slug}`} className={chip(categorie === c.slug)}>
@@ -70,7 +70,7 @@ export default async function Catalogue({ searchParams }: { searchParams: Promis
       </div>
 
       {apis.length === 0 && <p className="mt-8 text-muted">Aucune API ne correspond.</p>}
-      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+      <ul data-guide="cat-liste" className="mt-6 grid gap-4 sm:grid-cols-2">
         {apis.map((a) => (
           <li key={a.slug}>
             <Link href={`/catalogue/${a.slug}`} className="block h-full rounded-xl border border-line bg-card p-5 hover:border-accent">
@@ -79,7 +79,7 @@ export default async function Catalogue({ searchParams }: { searchParams: Promis
                   <p className="text-xs text-muted">{nomCategorie(a.category)}</p>
                   <h2 className="font-semibold">{a.name}</h2>
                 </div>
-                <span className="shrink-0 rounded-md bg-accent-soft px-2 py-1 text-sm font-medium text-accent">
+                <span data-guide="cat-prix" className="shrink-0 rounded-md bg-accent-soft px-2 py-1 text-sm font-medium text-accent">
                   {fcfa(a.price_fcfa)} / appel
                 </span>
               </div>
@@ -89,7 +89,7 @@ export default async function Catalogue({ searchParams }: { searchParams: Promis
                 {Number(a.appels).toLocaleString("fr-FR")} appel{Number(a.appels) > 1 ? "s" : ""}
               </p>
               {a.prise_slug && (
-                <p className="mt-2 text-xs text-accent">Prise standard « {a.prise_slug} » · bascule automatique</p>
+                <p data-guide="cat-prise" className="mt-2 text-xs text-accent">Prise standard « {a.prise_slug} » · bascule automatique</p>
               )}
             </Link>
           </li>

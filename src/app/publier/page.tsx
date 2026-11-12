@@ -15,13 +15,13 @@ export default async function Publier() {
       <h1 className="text-2xl font-semibold">Publier une API</h1>
       <p className="mt-1 text-muted">
         Tout type d&apos;API : paiement, SMS, traduction, cartes, données, documents… Vous fixez le prix, vous touchez
-        90 % de chaque appel.
+        75 % de chaque appel.
       </p>
       <div className="mt-6">
         {dev && !dev.estJury ? (
           <FormPublier prises={prises} />
         ) : (
-          <div className="rounded-xl border border-line bg-card p-5">
+          <div data-guide="pub-compte" className="rounded-xl border border-line bg-card p-5">
             <p>{dev?.estJury ? "Le Pass Jury sert à essayer les API. Pour publier, créez un compte." : "Il faut un compte pour publier."}</p>
             <div className="mt-4 flex gap-3">
               <Link href="/inscription" className={bouton}>Créer un compte</Link>

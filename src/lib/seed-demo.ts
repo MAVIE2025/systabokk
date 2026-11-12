@@ -63,52 +63,52 @@ export async function seedDemo(pool: Pool): Promise<{ cleJury: string }> {
       slug: "montant-en-lettres", name: "Montant en lettres",
       description: "Écrit un montant en toutes lettres, en français, avec la phrase prête pour la facture.",
       category: "documents", countries: "BF,SN,CI,ML,NE,TG,BJ", owner: aminata,
-      upstream: "internal:/demo-apis/montant-en-lettres", price: 2, path: "?montant=12500",
+      upstream: "internal:/demo-apis/montant-en-lettres", price: 4, path: "?montant=12500",
     });
     await upsertApi({
       slug: "telephone", name: "Validation de numéro",
       description: "Vérifie le format d'un numéro et le renvoie au format international (+226…).",
       category: "identite", countries: "BF,SN,CI,ML,NE,TG,BJ,GN,CM", owner: moussa,
-      upstream: "internal:/demo-apis/telephone", price: 1, path: "?numero=70123456&pays=BF",
+      upstream: "internal:/demo-apis/telephone", price: 4, path: "?numero=70123456&pays=BF",
     });
     await upsertApi({
       slug: "devises", name: "Conversion FCFA ↔ euro",
       description: "Convertit entre FCFA (UEMOA, CEMAC) et euro à la parité fixe officielle.",
       category: "finance", countries: "BF,SN,CI,ML,NE,TG,BJ,CM,GA,CG,TD", owner: awa,
-      upstream: "internal:/demo-apis/devises", price: 1, path: "?montant=100000&de=XOF&vers=EUR",
+      upstream: "internal:/demo-apis/devises", price: 4, path: "?montant=100000&de=XOF&vers=EUR",
     });
     await upsertApi({
       slug: "qrcode", name: "Générateur de QR code",
       description: "Crée un QR code en SVG à partir d'un texte ou d'un lien : reçus, tickets, menus.",
       category: "outils", countries: "BF,SN,CI,ML,NE,TG,BJ,GN,CM", owner: aminata,
-      upstream: "internal:/demo-apis/qrcode", price: 3, path: "?texte=https://systabokk.dev&taille=256",
+      upstream: "internal:/demo-apis/qrcode", price: 8, path: "?texte=https://systabokk.dev&taille=256",
     });
     await upsertApi({
       slug: "paiement-a", name: "Paiement mobile — Fournisseur A (test)",
       description: "Encaissement Mobile Money simulé. Fournisseur prioritaire de la prise « paiement-mobile ».",
       category: "paiement", countries: "BF,SN,CI", owner: aminata,
-      upstream: "internal:/demo-apis/paiement/a", price: 25, prise: "paiement-mobile", priority: 1,
+      upstream: "internal:/demo-apis/paiement/a", price: 20, prise: "paiement-mobile", priority: 1,
       method: "POST", path: "/paiements", body: paiement,
     });
     await upsertApi({
       slug: "paiement-b", name: "Paiement mobile — Fournisseur B (test)",
       description: "Encaissement Mobile Money simulé. Prend le relais si le fournisseur A tombe.",
       category: "paiement", countries: "BF,SN,CI", owner: moussa,
-      upstream: "internal:/demo-apis/paiement/b", price: 25, prise: "paiement-mobile", priority: 2,
+      upstream: "internal:/demo-apis/paiement/b", price: 20, prise: "paiement-mobile", priority: 2,
       method: "POST", path: "/paiements", body: paiement,
     });
     await upsertApi({
       slug: "sms-a", name: "SMS — Fournisseur A (test)",
       description: "Envoi de SMS et d'OTP simulé. Fournisseur prioritaire de la prise « sms ».",
       category: "messagerie", countries: "BF,SN,CI,ML", owner: awa,
-      upstream: "internal:/demo-apis/sms/a", price: 15, prise: "sms", priority: 1,
+      upstream: "internal:/demo-apis/sms/a", price: 12, prise: "sms", priority: 1,
       method: "POST", path: "/envois", body: sms,
     });
     await upsertApi({
       slug: "sms-b", name: "SMS — Fournisseur B (test)",
       description: "Envoi de SMS et d'OTP simulé. Prend le relais si le fournisseur A tombe.",
       category: "messagerie", countries: "BF,SN,CI,ML", owner: moussa,
-      upstream: "internal:/demo-apis/sms/b", price: 15, prise: "sms", priority: 2,
+      upstream: "internal:/demo-apis/sms/b", price: 12, prise: "sms", priority: 2,
       method: "POST", path: "/envois", body: sms,
     });
 

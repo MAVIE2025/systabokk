@@ -30,9 +30,10 @@ test("téléphone : formats nationaux et internationaux", () => {
   assert.equal(validerTelephone("+999123").valide, false);
 });
 
-test("répartition du prix : créateur 90 %, arrondi en faveur de la commission", () => {
-  assert.deepEqual(splitPrice(25), { creator: 22, commission: 3 });
-  assert.deepEqual(splitPrice(2), { creator: 1, commission: 1 });
-  assert.deepEqual(splitPrice(100), { creator: 90, commission: 10 });
+test("répartition du prix : créateur 75 %, plateforme 25 %, arrondi en faveur de la commission", () => {
+  assert.deepEqual(splitPrice(20), { creator: 15, commission: 5 });
+  assert.deepEqual(splitPrice(4), { creator: 3, commission: 1 });
+  assert.deepEqual(splitPrice(25), { creator: 18, commission: 7 });
+  assert.deepEqual(splitPrice(100), { creator: 75, commission: 25 });
   assert.deepEqual(splitPrice(0), { creator: 0, commission: 0 });
 });

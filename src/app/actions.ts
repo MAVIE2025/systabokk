@@ -106,7 +106,7 @@ const schemaApi = z.object({
   category: z.enum(CATEGORIES.map((c) => c.slug) as [string, ...string[]], { message: "Choisissez une catégorie." }),
   countries: z.array(z.enum(PAYS_PUBLICATION)).min(1, "Choisissez au moins un pays."),
   upstreamUrl: z.string().trim().min(1, "Adresse de votre API requise.").max(300),
-  priceFcfa: z.coerce.number().int("Prix entier en FCFA.").min(1, "Prix : 1 FCFA au moins.").max(100000),
+  priceFcfa: z.coerce.number().int("Prix entier en FCFA.").min(4, "Prix : 4 FCFA au moins (pour que 25 % reste un montant entier en FCFA).").max(100000),
   docUrl: z.string().trim().max(300).optional().or(z.literal("")),
   exampleMethod: z.enum(["GET", "POST"]).default("GET"),
   examplePath: z.string().trim().max(200).regex(/^([?/].*)?$/, "L'exemple commence par « ? » ou « / ».").default(""),

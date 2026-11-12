@@ -57,24 +57,24 @@ export default async function FicheApi({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="py-10">
-      <Link href="/catalogue" className="text-sm text-muted hover:text-accent">← Catalogue</Link>
+      <Link href="/catalogue" data-guide="api-retour" className="text-sm text-muted hover:text-accent">← Catalogue</Link>
       <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm text-muted">{nomCategorie(a.category)}</p>
           <h1 className="text-2xl font-semibold">{a.name}</h1>
           <p className="mt-2 max-w-2xl text-muted">{a.description}</p>
-          <p className="mt-2 text-sm text-muted">
+          <p data-guide="api-auteur" className="mt-2 text-sm text-muted">
             Par {a.owner} ({a.owner_country}) · {a.countries.split(",").join(", ")}
             {a.doc_url && <> · <a href={a.doc_url} className="text-accent underline" rel="noopener noreferrer" target="_blank">Documentation</a></>}
           </p>
         </div>
-        <div className="rounded-xl border border-accent bg-accent-soft px-4 py-3 text-right">
+        <div data-guide="api-prix" className="rounded-xl border border-accent bg-accent-soft px-4 py-3 text-right">
           <p className="text-xs text-muted">Prix par appel</p>
           <p className="text-2xl font-semibold">{fcfa(a.price_fcfa)}</p>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div data-guide="api-fiabilite" className="mt-6 grid gap-3 sm:grid-cols-3">
         <div className="rounded-xl border border-line bg-card p-4">
           <p className="text-xs text-muted">Appels (7 jours)</p>
           <p className="mt-1 text-xl font-semibold tabular-nums">{total.toLocaleString("fr-FR")}</p>
@@ -91,7 +91,7 @@ export default async function FicheApi({ params }: { params: Promise<{ slug: str
       <p className="mt-1 text-xs text-muted">Mesuré sur les vrais appels passés par la passerelle.</p>
 
       {a.prise_slug && (
-        <section className="mt-8 rounded-xl border border-line bg-card p-5">
+        <section data-guide="api-prise" className="mt-8 rounded-xl border border-line bg-card p-5">
           <h2 className="font-semibold">Prise standard « {a.prise_name} »</h2>
           <p className="mt-1 text-sm text-muted">{a.prise_description}</p>
           <p className="mt-3 text-sm">Fournisseurs, dans l&apos;ordre de bascule :</p>
@@ -105,10 +105,10 @@ export default async function FicheApi({ params }: { params: Promise<{ slug: str
 
       <section className="mt-8">
         <h2 className="font-semibold">Appeler cette API</h2>
-        <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0f172a] p-4 text-xs text-[#e8edf7]">{curl}</pre>
+        <pre data-guide="api-curl" className="mt-2 overflow-x-auto rounded-xl bg-[#0f172a] p-4 text-xs text-[#e8edf7]">{curl}</pre>
       </section>
 
-      <section className="mt-8">
+      <section data-guide="api-essayer" className="mt-8">
         <h2 className="mb-3 font-semibold">Essayer maintenant</h2>
         <Essayer slug={a.slug} connecte={!!dev} />
       </section>
