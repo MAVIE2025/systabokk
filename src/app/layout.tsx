@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { devConnecte } from "@/lib/session";
 import { fcfa } from "@/lib/stats";
+import { deconnecter } from "@/app/actions";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,17 +21,27 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <span className="text-accent">Systa</span><span className="text-ocre">Bokk</span>
             </Link>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+              <Link href="/" className="hover:text-accent">Accueil</Link>
               <Link href="/catalogue" className="hover:text-accent">Catalogue</Link>
               <Link href="/publier" className="hover:text-accent">Publier</Link>
               <Link href="/agents" className="hover:text-accent">Agents IA</Link>
               <Link href="/jury" className="hover:text-accent">Pass Jury</Link>
               {dev ? (
-                <Link href="/espace" className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent">
-                  {dev.name.split(" ")[0]} · {fcfa(dev.balance)}
-                </Link>
+                <>
+                  <Link href="/espace" className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent">
+                    Mon compte · {fcfa(dev.balance)}
+                  </Link>
+                  <form action={deconnecter}>
+                    <button type="submit" className="hover:text-accent">Me déconnecter</button>
+                  </form>
+                </>
               ) : (
-                <Link href="/espace" className="hover:text-accent">Mon espace</Link>
+                <Link href="/espace" className="hover:text-accent">Mon compte</Link>
               )}
+              <a href="https://systalink.com" target="_blank" rel="noopener noreferrer"
+                className="rounded-md border border-accent px-2 py-1 font-medium text-accent hover:bg-accent hover:text-white">
+                Produits Systalink ↗
+              </a>
             </div>
           </nav>
         </header>
