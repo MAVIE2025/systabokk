@@ -30,10 +30,10 @@ function expliquer(e: unknown): string {
 /**
  * Au démarrage : applique les migrations, puis charge les données de démo (sauf SEED_DEMO=0).
  * Utile sur un hébergement sans accès console (Web service Systalink).
- * Réessaie pendant ~1 min si la base n'est pas encore joignable.
+ * Réessaie pendant ~10 min si la base n'est pas encore joignable (sans bloquer le serveur).
  */
 export async function demarrage() {
-  for (let essai = 1; essai <= 20; essai++) {
+  for (let essai = 1; essai <= 120; essai++) {
     try {
       await migrate(db, { migrationsFolder: path.join(process.cwd(), "drizzle") });
       console.log("[démarrage] migrations appliquées");
@@ -47,8 +47,8 @@ export async function demarrage() {
       }
       return;
     } catch (e) {
-      console.error(`[démarrage] essai ${essai}/20 : ${expliquer(e)}`);
-      await attendre(3000);
+      console.error(`[démarrage] essai ${essai}/120 : ${expliquer(e)}`);
+      await attendre(5000);
     }
   }
   console.error("[démarrage] ÉCHEC : la base est injoignable, l'appli démarre sans migration.");
