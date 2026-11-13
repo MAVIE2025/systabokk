@@ -1,0 +1,176 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/catalogue/[slug]",
+      "regex": "^/catalogue/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/catalogue/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/demo-apis/paiement/[fournisseur]/[[...path]]",
+      "regex": "^/demo\\-apis/paiement/([^/]+?)(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPfournisseur": "nxtPfournisseur",
+        "nxtPpath": "nxtPpath"
+      },
+      "namedRegex": "^/demo\\-apis/paiement/(?<nxtPfournisseur>[^/]+?)(?:/(?<nxtPpath>.+?))?(?:/)?$"
+    },
+    {
+      "page": "/demo-apis/sms/[fournisseur]/[[...path]]",
+      "regex": "^/demo\\-apis/sms/([^/]+?)(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPfournisseur": "nxtPfournisseur",
+        "nxtPpath": "nxtPpath"
+      },
+      "namedRegex": "^/demo\\-apis/sms/(?<nxtPfournisseur>[^/]+?)(?:/(?<nxtPpath>.+?))?(?:/)?$"
+    },
+    {
+      "page": "/v1/apis/[slug]/[[...path]]",
+      "regex": "^/v1/apis/([^/]+?)(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug",
+        "nxtPpath": "nxtPpath"
+      },
+      "namedRegex": "^/v1/apis/(?<nxtPslug>[^/]+?)(?:/(?<nxtPpath>.+?))?(?:/)?$"
+    },
+    {
+      "page": "/v1/prises/[prise]/[[...path]]",
+      "regex": "^/v1/prises/([^/]+?)(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPprise": "nxtPprise",
+        "nxtPpath": "nxtPpath"
+      },
+      "namedRegex": "^/v1/prises/(?<nxtPprise>[^/]+?)(?:/(?<nxtPpath>.+?))?(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/agents",
+      "regex": "^/agents(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/agents(?:/)?$"
+    },
+    {
+      "page": "/catalogue",
+      "regex": "^/catalogue(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/catalogue(?:/)?$"
+    },
+    {
+      "page": "/demo-apis/devises",
+      "regex": "^/demo\\-apis/devises(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demo\\-apis/devises(?:/)?$"
+    },
+    {
+      "page": "/demo-apis/montant-en-lettres",
+      "regex": "^/demo\\-apis/montant\\-en\\-lettres(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demo\\-apis/montant\\-en\\-lettres(?:/)?$"
+    },
+    {
+      "page": "/demo-apis/qrcode",
+      "regex": "^/demo\\-apis/qrcode(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demo\\-apis/qrcode(?:/)?$"
+    },
+    {
+      "page": "/demo-apis/telephone",
+      "regex": "^/demo\\-apis/telephone(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demo\\-apis/telephone(?:/)?$"
+    },
+    {
+      "page": "/espace",
+      "regex": "^/espace(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/espace(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/inscription",
+      "regex": "^/inscription(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/inscription(?:/)?$"
+    },
+    {
+      "page": "/jury",
+      "regex": "^/jury(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/jury(?:/)?$"
+    },
+    {
+      "page": "/mcp",
+      "regex": "^/mcp(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/mcp(?:/)?$"
+    },
+    {
+      "page": "/publier",
+      "regex": "^/publier(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/publier(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
