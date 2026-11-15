@@ -134,3 +134,41 @@ export const adminActions = pgTable(
   },
   (t) => [index("admin_actions_created_idx").on(t.createdAt)],
 );
+
+/**
+ * Forum d'entraide entre développeurs.
+ * « Oublié » n'est pas stocké : c'est un sujet encore ouvert dont la dernière relance date de plus de 7 jours.
+ */
+export const forumSujets = pgTable(
+  "forum_sujets",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    auteurDevId: uuid("auteur_dev_id").notNull().references(() => devs.id),
+    type: text("type", { enum: ["question", "recherche_api"] }).notNull().default("question"),
+    titre: text("titre").notNull(),
+    corps: text("corps").notNull(),
+    categorie: text("categorie"),
+    statut: text("statut", { enum: ["ouvert", "resolu"] }).notNull().default("ouvert"),
+    reponseValideeId: uuid("reponse_validee_id"),
+    nbRelances: integer("nb_relances").notNull().default(0),
+    relanceAt: timestamp("relance_at", { withTimezone: true }).notNull().defaultNow(), // création ou dernière relance
+    resoluAt: timestamp("resolu_at", { withTimezone: true }),
+    supprimeAt: timestamp("supprime_at", { withTimezone: true }), // retiré par l'admin
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("forum_sujets_relance_idx").on(t.relanceAt)],
+);
+
+export const forumReponses = pgTable(
+  "forum_reponses",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    sujetId: uuid("sujet_id").notNull().references(() => forumSujets.id),
+    auteurDevId: uuid("auteur_dev_id").notNull().references(() => devs.id),
+    corps: text("corps").notNull(),
+    apiSlug: text("api_slug"), // API du catalogue proposée en réponse (facultatif)
+    supprimeAt: timestamp("supprime_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("forum_reponses_sujet_idx").on(t.sujetId)],
+);

@@ -133,5 +133,67 @@ export async function seedDemo(pool: Pool): Promise<{ cleJury: string }> {
       );
     }
 
+    // Forum : quelques sujets de démonstration (insérés une seule fois, jamais écrasés)
+    const issa = await upsertDev("Issa (démo)", "issa@demo.systabokk.dev", "CI");
+    const koffi = await upsertDev("Koffi (démo)", "koffi@demo.systabokk.dev", "TG");
+    const sujetDemo = async (id: string, auteur: string, type: string, titre: string, corps: string, categorie: string | null,
+      creeIlYa: string, relanceIlYa: string, nbRelances = 0) => {
+      await pool.query(
+        `insert into forum_sujets (id, auteur_dev_id, type, titre, corps, categorie, nb_relances, created_at, relance_at)
+         values ($1, $2, $3, $4, $5, $6, $7, now() - $8::interval, now() - $9::interval) on conflict (id) do nothing`,
+        [id, auteur, type, titre, corps, categorie, nbRelances, creeIlYa, relanceIlYa],
+      );
+    };
+    const reponseDemo = async (id: string, sujet: string, auteur: string, corps: string, ilYa: string, api: string | null = null) => {
+      await pool.query(
+        `insert into forum_reponses (id, sujet_id, auteur_dev_id, corps, api_slug, created_at)
+         values ($1, $2, $3, $4, $5, now() - $6::interval) on conflict (id) do nothing`,
+        [id, sujet, auteur, corps, api, ilYa],
+      );
+    };
+    const valider = async (sujet: string, reponse: string, ilYa: string) => {
+      await pool.query(
+        `update forum_sujets set statut = 'resolu', reponse_validee_id = $2, resolu_at = now() - $3::interval
+         where id = $1 and reponse_validee_id is null and statut = 'ouvert'`,
+        [sujet, reponse, ilYa],
+      );
+    };
+    const { rows: dejaForum } = await pool.query("select 1 from forum_sujets where id = 'f0000000-0000-4000-8000-000000000001'");
+    if (!dejaForum.length) {
+      const S = (n: number) => `f0000000-0000-4000-8000-00000000000${n}`;
+      const R = (n: number) => `f1000000-0000-4000-8000-00000000000${n}`;
+      await sujetDemo(S(1), issa, "recherche_api", "Je cherche une API pour écrire les montants en lettres sur mes factures",
+        "Mes clients au Burkina exigent le montant en toutes lettres sur chaque facture (« Arrêtée la présente facture à la somme de… »). Je ne veux pas recoder ça en PHP. Une API existe ?",
+        "documents", "4 days", "4 days");
+      await reponseDemo(R(1), S(1), aminata, "Je l'ai publiée sur SystaBokk : 4 FCFA par appel, elle renvoie aussi la phrase prête pour la facture. Exemple : ?montant=12500 → « douze mille cinq cents ».", "3 days", "montant-en-lettres");
+      await valider(S(1), R(1), "3 days");
+
+      await sujetDemo(S(2), issa, "question", "Webhook Mobile Money reçu deux fois : comment éviter de livrer deux fois ?",
+        "Mon fournisseur renvoie parfois la même notification de paiement. Résultat : la commande est validée deux fois. Comment vous gérez ça ?",
+        "paiement", "6 days", "6 days");
+      await reponseDemo(R(2), S(2), moussa, "Classique. Garde la référence de transaction avec une contrainte unique en base : la 2e insertion échoue, tu réponds 200 sans rien refaire. Et vérifie toujours la signature du webhook.", "5 days");
+      await valider(S(2), R(2), "5 days");
+
+      await sujetDemo(S(3), koffi, "recherche_api", "API de vérification de numéro IFU au Burkina ?",
+        "Pour mon appli de facturation, je dois vérifier que l'IFU d'un client existe avant d'émettre la facture. Quelqu'un a ça ?",
+        "identite", "6 days", "6 days");
+      await reponseDemo(R(3), S(3), awa, "Pas encore au catalogue. Je peux la coder et la publier cette semaine si tu es preneur : tu serais le premier client.", "5 days");
+
+      await sujetDemo(S(4), awa, "question", "Next.js sur une instance de 512 Mo : le build plante",
+        "Sur l'offre gratuite, mon build Next.js s'arrête sans message. En local tout marche. Des idées ?",
+        "outils", "11 days", "11 days");
+      await reponseDemo(R(4), S(4), moussa, "Construis l'image avec output: 'standalone' et fais le build ailleurs (CI), puis ne déploie que le résultat : le serveur n'a plus besoin de 1 Go pour compiler.", "10 days");
+
+      await sujetDemo(S(5), koffi, "question", "Comment tester un paiement Mobile Money sans compte marchand ?",
+        "Je n'ai pas encore de compte marchand et je veux montrer mon tunnel de paiement à un client demain.",
+        "paiement", "5 hours", "5 hours");
+      await reponseDemo(R(5), S(5), moussa, "La prise standard « Paiement mobile » de SystaBokk a deux fournisseurs de test : même interface que la prod, et tu peux simuler une panne pour voir la bascule.", "3 hours", "paiement-a");
+
+      await sujetDemo(S(6), awa, "question", "Envoyer des SMS au Mali : quel fournisseur est fiable ?",
+        "J'ai eu beaucoup d'échecs de livraison vers les numéros maliens le mois dernier. Vous utilisez quoi ?",
+        "messagerie", "12 days", "1 day", 1);
+      await reponseDemo(R(6), S(6), issa, "Passe par la prise SMS : si le fournisseur A n'arrive pas à livrer, SystaBokk bascule sur B et tu ne paies que celui qui a servi.", "20 hours", "sms-a");
+    }
+
   return { cleJury: k.key };
 }

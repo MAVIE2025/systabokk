@@ -22,6 +22,7 @@ export function NavOnglets({
   const onglets = [
     { href: "/", nom: "Accueil", guide: "nav-accueil" },
     { href: "/catalogue", nom: "Catalogue", guide: "nav-catalogue" },
+    { href: "/forum", nom: "Forum", guide: "nav-forum" },
     { href: "/publier", nom: "Publier", guide: "nav-publier" },
     { href: "/agents", nom: "Agents IA", guide: "nav-agents" },
     { href: "/jury", nom: "Pass Jury", guide: "nav-jury" },

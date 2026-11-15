@@ -61,7 +61,8 @@ export async function devConnecte(): Promise<DevSession | null> {
 export async function poserCle(cle: string) {
   (await cookies()).set(COOKIE_CLE, cle, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    // COOKIE_SECURE=0 : site servi en http simple (adresse IP sans certificat), sinon le navigateur refuse le cookie
+    secure: process.env.COOKIE_SECURE ? process.env.COOKIE_SECURE === "1" : process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
