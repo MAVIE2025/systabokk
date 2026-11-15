@@ -11,18 +11,9 @@
   --ocre: #b4530a;         /* touche africaine : « Bokk » */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b1120;
-    --foreground: #e8edf7;
-    --muted: #94a0b8;
-    --line: #1f2a40;
-    --card: #111a2e;
-    --accent: #6b9bff;
-    --accent-soft: #15213b;
-    --ocre: #f08a3c;
-  }
-}
+/* Toujours en clair, même si l'ordinateur est réglé en mode sombre */
+:root { color-scheme: light; }
+body { background: var(--background); color: var(--foreground); }
 
 @theme inline {
   --color-background: var(--background);

@@ -24,6 +24,8 @@ function expliquer(e: unknown): string {
     ECONNRESET: "connexion coupée : essayez DATABASE_SSL=require",
   };
   if (!process.env.DATABASE_URL && !process.env.PGHOST) return "ni DATABASE_URL ni PGHOST ne sont définies";
+  if (/server login has been failing|connect failed/i.test(msg))
+    return `${msg} — le pooler de l'hébergeur n'arrive pas à joindre PostgreSQL : la base elle-même est en panne (côté hébergeur)`;
   return pistes[code] ? `${msg} (${code}) — ${pistes[code]}` : `${msg}${code ? ` (${code})` : ""}`;
 }
 
